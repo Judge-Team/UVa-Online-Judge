@@ -19,6 +19,7 @@ int cycle_length(int n)
 int main(int argc, char *argv[])
 {
     int start, end, first, second, max;
+    int i;
 
     while (scanf("%d %d", &first, &second) == 2) {
 
@@ -32,7 +33,7 @@ int main(int argc, char *argv[])
 
         max = 0;
 
-        for (int i = start; i <= end; ++i) {
+        for (i = start; i <= end; ++i) {
             int len = cycle_length(i);
             if (len > max) {
                 max = len;
