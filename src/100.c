@@ -6,9 +6,9 @@ int cycle_length(int n)
 
     while (n != 1) {
         if (n % 2) {
-            n /= 2;
-        } else {
             n = 3 * n + 1;
+        } else {
+            n /= 2;
         }
         ++len;
     }
