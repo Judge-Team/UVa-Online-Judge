@@ -3,7 +3,7 @@ project(UVa-Online-Judge)
 
 if(${CMAKE_C_COMPILER_ID} STREQUAL "GNU" OR
     ${CMAKE_C_COMPILER_ID} STREQUAL "Clang")
-        set(CMAKE_C_FLAGS "-g -O2 -Wall -fPIC -std=c99 ${CMAKE_C_FLAGS}")
+        set(CMAKE_C_FLAGS "-lm -lcrypt -O2 -pipe -ansi -DONLINE_JUDGE ${CMAKE_C_FLAGS}")
 endif()
 
 file(GLOB all_src ${PROJECT_SOURCE_DIR}/src/*)
