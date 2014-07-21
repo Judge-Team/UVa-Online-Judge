@@ -50,12 +50,12 @@ int compare_id(void *x, void *y)
     return a->id - b->id;
 }
 
-int is_stackable(struct Box *x, struct Box *y)
+int is_stackable(struct Box *x, struct Box *y, int dim)
 {
     int i;
 
-    for (i = 0; i < MAX_DIM; ++i) {
-        if (x->dim[i] > y->dim[i]) {
+    for (i = 0; i < dim; ++i) {
+        if (x->dim[i] >= y->dim[i]) {
             return 0;
         }
     }
@@ -96,7 +96,7 @@ int main(int argc, char *argv[])
 
         for (i = box - 2; i >= 0; --i) {
             for (j = i + 1; j < box; ++j) {
-                if (is_stackable(&data[i], &data[j])) {
+                if (is_stackable(&data[i], &data[j], dim)) {
                     if (data[i].size <= data[j].size) {
                         data[i].size = data[j].size + 1;
                         data[i].next = data[j].id;
