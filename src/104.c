@@ -16,7 +16,8 @@ struct BellmanFord {
 struct Ans {
     int solved;
     int path_len;
-    int path[MAX_DIM + 1];
+    int start;
+    int path[MAX_DIM];
 };
 
 void has_negative_cycle(int start, double data[MAX_DIM][MAX_DIM], int dim, struct Ans *ans)
@@ -79,12 +80,11 @@ void has_negative_cycle(int start, double data[MAX_DIM][MAX_DIM], int dim, struc
              * Update ans only when there is no solution, or the current
              * solution is shortest then previous one.
              */
-            if (!ans->solved || curr[start].path_len + 2 < ans->path_len) {
+            if (!ans->solved || curr[start].path_len < ans->path_len) {
                 ans->solved = 1;
-                ans->path_len = curr[start].path_len + 2;
-                ans->path[0] = start;
-                memcpy(ans->path + 1, curr[start].path, sizeof(ans->path[0]) * curr[start].path_len);
-                ans->path[ans->path_len - 1] = start;
+                ans->path_len = curr[start].path_len;
+                ans->start = start;
+                memcpy(ans->path, curr[start].path, sizeof(ans->path[0]) * curr[start].path_len);
             }
             return;
         }
@@ -104,10 +104,11 @@ void find_arbitrage(double data[MAX_DIM][MAX_DIM], int dim)
     }
 
     if (ans.solved) {
-        for (i = 0; i < ans.path_len - 1; ++i) {
+        printf("%d ", ans.start + 1);
+        for (i = 0; i < ans.path_len; ++i) {
             printf("%d ", ans.path[i] + 1);
         };
-        printf("%d\n", ans.path[ans.path_len - 1] + 1);
+        printf("%d\n", ans.start + 1);
     } else {
         printf("no arbitrage sequence exists\n");
     }
