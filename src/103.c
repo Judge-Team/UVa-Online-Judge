@@ -81,9 +81,11 @@ int main(int argc, char *argv[])
             for (j = 0; j < dim; ++j) {
                 scanf("%d", &data[i].dim[j]);
             }
+            /* Sort by dimension */
             sort_dim(&data[i]);
         }
 
+        /* Topological sort */
         qsort(&data, box, sizeof(data[0]), compare_size);
 
         for (i = 0; i < box; ++i) {
@@ -94,6 +96,14 @@ int main(int argc, char *argv[])
         sol_base = 1;
         sol_size = 1;
 
+        /*
+         * The DP formula:
+         *
+         * Stack[i, j] = maximum stack from i to j
+         *
+         * Stack[i, j] = max | 1 + Stack[i + 1, j] if is_stackable(i, head of Stack[i + 1, j])
+         *                   | Stack[i + 1, j] otherwise
+         */
         for (i = box - 2; i >= 0; --i) {
             for (j = i + 1; j < box; ++j) {
                 if (is_stackable(&data[i], &data[j], dim)) {
