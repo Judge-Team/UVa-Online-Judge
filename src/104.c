@@ -13,7 +13,13 @@ struct BellmanFord {
     int path[MAX_DIM];
 };
 
-int has_negative_cycle(int start, double data[MAX_DIM][MAX_DIM], int dim)
+struct Ans {
+    int solved;
+    int path_len;
+    int path[MAX_DIM + 1];
+};
+
+void has_negative_cycle(int start, double data[MAX_DIM][MAX_DIM], int dim, struct Ans *ans)
 {
     int dest;
     int i;
@@ -30,14 +36,13 @@ int has_negative_cycle(int start, double data[MAX_DIM][MAX_DIM], int dim)
 
     for (dest = 0; dest < dim; ++dest) {
         buf1[dest].cost = data[start][dest];
-        buf1[dest].path_len = 1;
-        buf1[dest].path[0] = dest;
+        buf1[dest].path_len = 0;
     }
 
     curr = buf1;
     next = buf2;
 
-    for (i = 0; i < dim; ++i) {
+    for (i = 0; i < dim - 1; ++i) {
         for (dest = 0; dest < dim; ++dest) {
             next[dest] = curr[dest];
             for (j = 0; j < dim; ++j) {
@@ -45,7 +50,7 @@ int has_negative_cycle(int start, double data[MAX_DIM][MAX_DIM], int dim)
                     next[dest] = curr[j];
                     next[dest].cost *= data[j][dest];
                     ++next[dest].path_len;
-                    next[dest].path[curr[j].path_len] = dest;
+                    next[dest].path[curr[j].path_len] = j;
                 }
             }
         }
@@ -61,7 +66,6 @@ int has_negative_cycle(int start, double data[MAX_DIM][MAX_DIM], int dim)
 
 #if 0
         for (i = 0; i < dim; ++i) {
-            int j;
             printf("cost = %f, ", curr[i].cost);
             for (j = 0; j < curr[i].path_len; ++j) {
                 printf("%d -> ", curr[i].path[j]);
@@ -70,29 +74,39 @@ int has_negative_cycle(int start, double data[MAX_DIM][MAX_DIM], int dim)
         }
 #endif
 
-        if (curr[start].cost > 1.01) {
-            printf("%d", start + 1);
-            for (i = 0; i < curr[start].path_len; ++i) {
-                printf(" %d", curr[start].path[i] + 1);
+        if (curr[start].cost >= 1.01) {
+            if (!ans->solved || curr[start].path_len + 2 < ans->path_len) {
+                ans->solved = 1;
+                ans->path_len = curr[start].path_len + 2;
+                ans->path[0] = start;
+                memcpy(ans->path + 1, curr[start].path, sizeof(ans->path[0]) * curr[start].path_len);
+                ans->path[ans->path_len - 1] = start;
             }
-            printf("\n");
-            return 1;
+            return;
         }
     }
 
-    return 0;
+    return;
 }
 
 void find_arbitrage(double data[MAX_DIM][MAX_DIM], int dim)
 {
     int i;
+    struct Ans ans;
+
+    ans.solved = 0;
     for (i = 0; i < dim; ++i) {
-        int ret = has_negative_cycle(i, data, dim);
-        if (ret) {
-            return;
-        }
+        has_negative_cycle(i, data, dim, &ans);
     }
-    printf("no arbitrage sequence exists\n");
+
+    if (ans.solved) {
+        for (i = 0; i < ans.path_len - 1; ++i) {
+            printf("%d ", ans.path[i] + 1);
+        };
+        printf("%d\n", ans.path[ans.path_len - 1] + 1);
+    } else {
+        printf("no arbitrage sequence exists\n");
+    }
 }
 
 int main(int argc, char *argv[])
