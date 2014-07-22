@@ -7,6 +7,8 @@ enum {
     MAX_DIM = 20,
 };
 
+double CONSTRAINT = -log(1.01);
+
 struct BellmanFord {
     double cost;
     int path_len;
@@ -15,9 +17,9 @@ struct BellmanFord {
 
 int has_negative_cycle(int start, double data[MAX_DIM][MAX_DIM], int dim)
 {
-    int step;
     int dest;
     int i;
+    int j;
 
     struct BellmanFord buf1[MAX_DIM];
     struct BellmanFord buf2[MAX_DIM];
@@ -37,17 +39,22 @@ int has_negative_cycle(int start, double data[MAX_DIM][MAX_DIM], int dim)
     curr = buf1;
     next = buf2;
 
-    for (step = 1; step <= dim; ++step) {
+    for (i = 0; i < dim; ++i) {
         for (dest = 0; dest < dim; ++dest) {
             next[dest] = curr[dest];
-            for (i = 0; i < dim; ++i) {
-                if (next[dest].cost > curr[i].cost + data[i][dest]) {
-                    next[dest] = curr[i];
-                    next[dest].cost += data[i][dest];
+            for (j = 0; j < dim; ++j) {
+                if (next[dest].cost > curr[j].cost + data[j][dest]) {
+                    next[dest] = curr[j];
+                    next[dest].cost += data[j][dest];
                     ++next[dest].path_len;
-                    next[dest].path[curr[i].path_len] = dest;
+                    next[dest].path[curr[j].path_len] = dest;
                 }
             }
+        }
+
+        /* Bellman-Ford early termination. */
+        if (memcmp(curr, next, sizeof(buf1)) == 0) {
+            break;
         }
 
         tmp = curr;
@@ -65,7 +72,7 @@ int has_negative_cycle(int start, double data[MAX_DIM][MAX_DIM], int dim)
         }
 #endif
 
-        if (curr[start].cost < 0) {
+        if (curr[start].cost < CONSTRAINT) {
             printf("%d", start + 1);
             for (i = 0; i < curr[start].path_len; ++i) {
                 printf(" %d", curr[start].path[i] + 1);
@@ -98,10 +105,10 @@ int main(int argc, char *argv[])
     double data[MAX_DIM][MAX_DIM];
 
     while (scanf("%d", &dim) == 1) {
-        memset(data, 0, sizeof(data));
         for (i = 0; i < dim; ++i) {
             for (j = 0; j < dim; ++j) {
                 if (i == j) {
+                    data[i][j] = 0;
                     continue;
                 }
 
@@ -125,9 +132,9 @@ int main(int argc, char *argv[])
          *
          * We want to solve a,b,c,d, ... in the following equation:
          *
-         * E[a,b] * E[b,c] * E[c,d] ... > 1
-         * log(E[a,b]) + log(E[b,c]) + log(E[c,d]) ... > log(1) = 0
-         * -log(E[a,b]) + -log(E[b,c]) + -log(E[c,d]) ... < 0
+         * E[a,b] * E[b,c] * E[c,d] ... > 1.01
+         * log(E[a,b]) + log(E[b,c]) + log(E[c,d]) ... > log(1.01)
+         * -log(E[a,b]) + -log(E[b,c]) + -log(E[c,d]) ... < -log(1.01)
          *
          * The solution becomes negative cycle in all pair shortest path problem.
          * It can be solved by Bellman-Ford algorithm.
