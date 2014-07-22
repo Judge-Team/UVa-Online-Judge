@@ -58,7 +58,7 @@ void has_negative_cycle(int start, double data[MAX_DIM][MAX_DIM], int dim, struc
 
         /* Bellman-Ford early termination. */
         if (memcmp(curr, next, sizeof(buf1)) == 0) {
-            break;
+            return;
         }
 
         tmp = curr;
