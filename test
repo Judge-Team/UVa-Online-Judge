@@ -1,0 +1,13 @@
+#!/bin/sh
+
+ID=$1
+SRC=$2
+BIN=$3
+
+EXEC=${BIN}/${ID}
+IN=${SRC}/data/${ID}.in
+OUT=${SRC}/data/${ID}.out
+ANS=${SRC}/data/${ID}.ans
+
+${EXEC} < ${IN} > ${OUT}
+diff ${OUT} ${ANS}
