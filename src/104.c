@@ -7,8 +7,6 @@ enum {
     MAX_DIM = 20,
 };
 
-double CONSTRAINT = -log(1.01);
-
 struct BellmanFord {
     double cost;
     int path_len;
@@ -43,9 +41,9 @@ int has_negative_cycle(int start, double data[MAX_DIM][MAX_DIM], int dim)
         for (dest = 0; dest < dim; ++dest) {
             next[dest] = curr[dest];
             for (j = 0; j < dim; ++j) {
-                if (next[dest].cost > curr[j].cost + data[j][dest]) {
+                if (next[dest].cost < curr[j].cost * data[j][dest]) {
                     next[dest] = curr[j];
-                    next[dest].cost += data[j][dest];
+                    next[dest].cost *= data[j][dest];
                     ++next[dest].path_len;
                     next[dest].path[curr[j].path_len] = dest;
                 }
@@ -72,7 +70,7 @@ int has_negative_cycle(int start, double data[MAX_DIM][MAX_DIM], int dim)
         }
 #endif
 
-        if (curr[start].cost < CONSTRAINT) {
+        if (curr[start].cost > 1.01) {
             printf("%d", start + 1);
             for (i = 0; i < curr[start].path_len; ++i) {
                 printf(" %d", curr[start].path[i] + 1);
@@ -108,13 +106,11 @@ int main(int argc, char *argv[])
         for (i = 0; i < dim; ++i) {
             for (j = 0; j < dim; ++j) {
                 if (i == j) {
-                    data[i][j] = 0;
+                    data[i][j] = 1;
                     continue;
                 }
 
                 scanf("%lf", &data[i][j]);
-
-                data[i][j] = -log(data[i][j]);
             }
         }
 
@@ -133,6 +129,7 @@ int main(int argc, char *argv[])
          * We want to solve a,b,c,d, ... in the following equation:
          *
          * E[a,b] * E[b,c] * E[c,d] ... > 1.01
+         *
          * log(E[a,b]) + log(E[b,c]) + log(E[c,d]) ... > log(1.01)
          * -log(E[a,b]) + -log(E[b,c]) + -log(E[c,d]) ... < -log(1.01)
          *
