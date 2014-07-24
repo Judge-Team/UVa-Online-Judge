@@ -1,10 +1,10 @@
 #!/bin/sh
 
 ID=$1
-SRC=$2
-BIN=$3
+SRC=@PROJECT_SOURCE_DIR@
+BIN=@PROJECT_BINARY_DIR@
 
-EXEC=${BIN}/${ID}
+EXEC=${BIN}/bin/${ID}
 IN=${SRC}/data/${ID}.in
 OUT=${SRC}/data/${ID}.out
 ANS=${SRC}/data/${ID}.ans
