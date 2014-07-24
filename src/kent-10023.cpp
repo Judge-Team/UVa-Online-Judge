@@ -1,7 +1,11 @@
 #include <stdio.h>
+#include <cstdio>
+#include <cstring>
+#include <cstdlib>
+using namespace std;
 
 struct Big_num{
-	char	value[3000];
+	char	value[1010];
 	int	length;
 };
 
@@ -49,7 +53,7 @@ void cut( struct Big_num *target , struct Big_num *src )
 void Multiplication( struct Big_num *target , int num )
 {
 	struct Big_num *temp;
-	temp = calloc( 1 , sizeof(struct Big_num) );
+	temp = (struct Big_num*)calloc( 1 , sizeof(struct Big_num) );
 	int i , j , k ;
 	int check;
 	k = 0;
@@ -109,7 +113,7 @@ int bigcmp( struct Big_num *A , struct Big_num *B )
 void init( struct Big_num * A , struct Big_num * B )
 {
 	int i;
-	for ( i = 0 ; i < 3000 ; i++ ){
+	for ( i = 0 ; i < 1010 ; i++ ){
 		A->value[i] = 0;
 		B->value[i] = 0;
 		source.value[i] = 0;
@@ -125,9 +129,8 @@ int main()
 	int T;
 	struct Big_num Reg , Ans , Tmp;
 	char temp[1000];
-	in = fopen("10023.in","r");
+	in = stdin;/*fopen("10023.in","r");*/
 	fscanf( in , "%d" , &num );
-	printf("%d\n",num);
 	for ( i = 0 ; i < num ; i++ ){
 		init( &Ans , &Reg );
 		fscanf( in , "%s" , temp);
@@ -135,7 +138,6 @@ int main()
 		for ( j = 0 , k = source.length-1 ; j < source.length ; j++ , k-- ){
 			source.value[k] = temp[j] - '0';
 		}
-		printf("\n");
 		Reg.length = 2;
 		Ans.length = 1;
 		Ans.value[0] = 0;
@@ -150,10 +152,6 @@ int main()
 
 			Reg.value[1] = source.value[j];
 			Reg.value[0] = source.value[j-1];
-			for( y = Reg.length-1 ; y >= 0 ; y-- )
-				printf("%d",Reg.value[y]);
-			printf(" ");
-			/* guest ans*/
 			for ( x = 0 ; x <= 9 ; x++ ){
 				memcpy( &Tmp , &Ans , sizeof(struct Big_num) );
 				Multiplication( &Tmp , 20 );
@@ -161,29 +159,16 @@ int main()
 				Multiplication( &Tmp , x );
 				if ( bigcmp( &Tmp , &Reg ) == 1 )
 					break;
-				//for( y = Tmp.length-1 ; y >= 0 ; y-- )
-				//	printf("%d",Tmp.value[y]);
-				//printf(" ");
 			}
 			memcpy( &Tmp , &Ans , sizeof(struct Big_num) );
 			Multiplication( &Tmp , 20 );
 			add_int( &Tmp , x-1 );
 			Multiplication( &Tmp , x-1 );
-			//printf("%d:%d%d\n",Tmp.length , Tmp.value[1] , Tmp.value[0]);
-			for( y = Tmp.length-1 ; y >= 0 ; y-- )
-				printf("%d",Tmp.value[y]);
-			printf(" ");	
 			cut( &Reg , &Tmp );
 			Multiplication( &Ans , 10 );
 			Ans.value[0] = x-1;
-			printf(" | ");
-			for( y = Ans.length ; y >= 0 ; y-- )
-				printf("%d",Ans.value[y]);
 				
-			//printf("%d%d ",source.value[j],source.value[j-1]);
-			//printf(" %d:%d%d ",Reg.length,Reg.value[1],Reg.value[0]);
 			Multiplication( &Reg , 100 );
-			printf("\n");
 		}
 		check = 0;
 		for( x = Ans.length ; x >= 0 ; x-- )
@@ -195,8 +180,11 @@ int main()
 
 			printf("%d",Ans.value[x]);
 		}
-			
+		if( Ans.length == 1 && Ans.value[0] == 0 )
+			printf("0");
 		printf("\n");
+		if( i != num-1 )	
+			printf("\n");
 	}
 
 }
