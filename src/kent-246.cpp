@@ -1,6 +1,8 @@
-#include<cstdio>
-#include<cmath>
-#include<vector>
+#include <stdio.h>
+#include <stdlib.h>
+#include <cstdio>
+#include <cmath>
+#include <vector>
 using namespace std;
 
 struct CARD {
@@ -33,14 +35,14 @@ void dealt_card_to_top( struct CARD *dst , struct CARD *src )
 	src->top = (src->top+1)%52;
 	dst->num++;
 	src->num--;
-	
+
 }
 
 void dealt_card_to_buttom( struct CARD *dst , struct CARD *src )
 {
 	dst->buttom = (dst->buttom + 1)%52;
 	dst->card[dst->buttom] = src->card[src->top];
-	src->top = (src->top+1)%52;	
+	src->top = (src->top+1)%52;
 	dst->num++;
 	src->num--;
 }
@@ -51,14 +53,14 @@ void insert_card_to_top( struct CARD *dst , struct CARD *src )
 	dst->card[dst->top] = src->card[src->buttom];
 	src->buttom = (52 + src->buttom - 1)%52;
 	dst->num++;
-	src->num--;	
+	src->num--;
 }
 
 void insert_card_to_buttom( struct CARD *dst , struct CARD *src )
 {
 	dst->buttom = (dst->buttom + 1)%52;
 	dst->card[dst->buttom] = src->card[src->buttom];
-	src->buttom = (52 + src->buttom - 1)%52;	
+	src->buttom = (52 + src->buttom - 1)%52;
 	dst->num++;
 	src->num--;
 }
@@ -128,11 +130,11 @@ void add_trace_data( int round )
 	int i;
 	int hash;
 	struct CARD *P[7] , *D;
-	struct Trace *T_ptr , *create; 
+	struct Trace *T_ptr , *create;
 
 
 	for ( i = 0 ; i < 7 ; i++ ){
-		P[i] = (struct CARD*)malloc(sizeof(struct CARD));	
+		P[i] = (struct CARD*)malloc(sizeof(struct CARD));
 		memcpy( P[i] , &pile[i] , sizeof(struct CARD) );
 	}
 	D = (struct CARD*)malloc(sizeof(struct CARD));
@@ -165,7 +167,7 @@ void free_trace_data()
 		if ( trace[i] == NULL )
 			continue;
 		T_ptr = trace[i];
-		
+
 		while ( trace[i] != NULL ){
 			T_ptr = trace[i];
 			trace[i] = trace[i]->next;
@@ -188,7 +190,7 @@ int check_over()
 	} else if ( duplicate != 0 ){
 		return 3;
 	}
-	
+
 	return 0;
 }
 
@@ -231,7 +233,7 @@ int main()
 			break;
 		i = 0;
 		deck.card[i] = tmp;
-		for ( i = 1 ; i < 52 ; i++ ){ 
+		for ( i = 1 ; i < 52 ; i++ ){
 			fscanf(in,"%d",&tmp);
 			deck.card[i] = tmp;
 		}
@@ -239,13 +241,13 @@ int main()
 		deck.top = 0;
 		deck.buttom = 51;
 		deck.num = 52;
-		// first two card in each pile 
+		// first two card in each pile
 		for ( i = 0 ; i < 14 ; i++ ){
 			dealt_card_to_top( &(pile[i%7]) , &deck );
 		}
 		round = 14;
 		check_num = 16;
-		
+
 		while ( !check_over() ){
 			for ( i = 0 ; i < 7 && !check_over() ; i++ ){
 
@@ -254,7 +256,7 @@ int main()
 					round++;
 				}
 				while ( pile[i].num >= 3 ){
-					
+
 					first = pile[i].buttom;
 					second = (pile[i].buttom-1+52)%52;
 					last = pile[i].top;
@@ -266,11 +268,11 @@ int main()
 
 						insert_card_to_buttom(&deck,&(pile[i])); //first
 						insert_card_to_buttom(&deck,&(pile[i])); //second
-						dealt_card_to_buttom(&deck,&(pile[i]));  //last	
+						dealt_card_to_buttom(&deck,&(pile[i]));  //last
 
 					}else if ( (pile[i].card[first]+pile[i].card[last]
 								+pile[i].card[last_2])%10 == 0 ){
-						
+
 						insert_card_to_buttom(&deck,&(pile[i])); //first
 						dealt_card_to_buttom(&deck,&(pile[i]));	 //last
 						dealt_card_to_buttom(&deck,&(pile[i]));  //last2
@@ -298,7 +300,7 @@ int main()
 					if ( check_duplicate() == true ){
 						//	printf("duplicate!\n");
 						break;
-					}				
+					}
 					//if ( check_num == round || round < 16 ){
 						add_trace_data( round );
 					//	if ( check_num == round )
@@ -313,7 +315,7 @@ int main()
 		tmp = check_over();
 		switch (tmp){
 			case 1:
-				printf("Loss: %d\n",round);	
+				printf("Loss: %d\n",round);
 				break;
 			case 2:
 				printf("Win : %d\n",round);

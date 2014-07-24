@@ -1,3 +1,5 @@
+#include <stdlib.h>
+#include <stdio.h>
 #include <cstdio>
 #include <map>
 #include <algorithm>
@@ -12,7 +14,7 @@ struct LIST {
 	int	a;
 	int	b;
 	int index;
-}; 
+};
 
 int 	List[1001];
 struct	LIST Z[2004002];
@@ -30,8 +32,8 @@ void swap(struct LIST *a , struct LIST *b)
 int compare(const void * a, const void * b)
 {
 	struct LIST c , d;
-	c = *(struct LIST*)a; 
-	d = *(struct LIST*)b; 
+	c = *(struct LIST*)a;
+	d = *(struct LIST*)b;
 	if ( c.value > d.value ){
 		return 1;
 	} else if (c.value < d.value){
@@ -49,19 +51,19 @@ int main( int argc , char *argv[] )
 	int	max_number;
 	int	tmp;
 
-	
+
 	in = stdin;
 
 
 
-	while ( fscanf(in , "%ld" , &list_num) , list_num ){
+	while ( fscanf(in , "%d" , &list_num) , list_num ){
 		max_number = -9999999;
-		
+
 		for (i = 0 ; i < list_num ; i++){
-			fscanf( in , "%ld" , &List[i] );
+			fscanf( in , "%d" , &List[i] );
 		}
-		
-		
+
+
 		for (i = 0 , k = 0 ; i < list_num ; i++){
 			for (j = 0 ; j < list_num ; j++){
 				if( i == j )
@@ -77,14 +79,14 @@ int main( int argc , char *argv[] )
 				if( i == j )
 					continue;
 
-				Z[k].value = List[i] - List[j];		
+				Z[k].value = List[i] - List[j];
 				Z[k].a = i;
 				Z[k].b = j;
 				k++;
 			}
 		}
 		qsort( Z , k , sizeof(Z[0]) , compare );
-		
+
 		for ( i = 0 ; i < k - 1 ; i++ ){
 			j = 0;
 			while( Z[i+j].value == Z[i+j+1].value ){
@@ -93,7 +95,7 @@ int main( int argc , char *argv[] )
 				    Z[i].a != Z[i+1].b &&
 				    Z[i].b != Z[i+1].a ){
 
-					if( List[Z[i].a] + List[Z[i].b] 
+					if( List[Z[i].a] + List[Z[i].b]
 					  + List[Z[i+1].b] == List[Z[i+1].a] ){
 						tmp = Z[i+1].a;
 						max_number = ( List[tmp] > max_number )
@@ -103,7 +105,7 @@ int main( int argc , char *argv[] )
 				j++;
 			}
 
-		} 
+		}
 		if( max_number > -9999999)
 			printf("%d\n",max_number);
 		else
