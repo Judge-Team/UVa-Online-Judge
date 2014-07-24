@@ -5,44 +5,45 @@ enum {
     MAX_COORDINATE = 10000,
 };
 
-struct Build {
-    int left;
-    int height;
-    int right;
-};
-
-int min(int x, int y)
+int max(int x, int y)
 {
-    return x < y ? x : y;
+    return x > y ? x : y;
 }
-
-int compare_build(void *x, void *y)
-{
-    struct Build *a = (struct Build *) x;
-    struct Build *b = (struct Build *) y;
-
-    return a->left - b->left;
-}
-
 
 int main(int argc, char *argv[])
 {
-    struct Build build[MAX_BUILD];
-    int build_count = 0;
+    int skyline[MAX_COORDINATE] = { 0 };
+
+    int left;
+    int right;
+    int height;
     int i;
+    int prev_skyline;
 
-    int skyline;
-    int skyline_cand_start;
-
-    while (scanf("%d %d %d", &build[build_count].left, &build[build_count].height, &build[build_count].right) == 3) {
-        ++build_count;
+    while (scanf("%d %d %d", &left, &height, &right) == 3) {
+        for (i = left; i < right; ++i) {
+            skyline[i] = max(skyline[i], height);
+        }
     }
 
-    qsort(build, build_count, sizeof(build[0]), compare_build);
+    prev_skyline = 0;
 
-    skyline = 0;
-    skyline_cand_start = 0;
-    printf("%d %d", build[skyline].left, build[skyline].height);
+    for (i = 0; i < MAX_COORDINATE; ++i) {
+        if (skyline[i] != 0) {
+            printf("%d %d", i, skyline[i]);
+            prev_skyline = skyline[i];
+            break;
+        }
+    }
+
+    for (; i < MAX_COORDINATE; ++i) {
+        if (prev_skyline != skyline[i]) {
+            printf(" %d %d", i, skyline[i]);
+            prev_skyline = skyline[i];
+        }
+    }
+
+    printf("\n");
 
     return 0;
 }
