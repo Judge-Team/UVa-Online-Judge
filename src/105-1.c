@@ -72,7 +72,7 @@ void handle_skyline_end(struct Data *data)
 
     if (new_current_skyline != -1) {
         if (data->build[new_current_skyline].height != data->build[data->current_skyline].height) {
-            printf(" %d %d", data->build[new_current_skyline].left, data->build[new_current_skyline].height);
+            printf(" %d %d", data->pos, data->build[new_current_skyline].height);
         }
         data->current_skyline = new_current_skyline;
     }
@@ -91,10 +91,23 @@ int main(int argc, char *argv[])
         }
     }
 
+    /* find first skyline */
     data.current_skyline = 0;
     data.next_skyline_cand = 1;
     data.research_start = 0;
     data.pos = data.build[0].left + 1;
+    while (data.next_skyline_cand < data.build_count) {
+        if (data.build[data.current_skyline].left < data.build[data.next_skyline_cand].left) {
+            break;
+        }
+
+        if (data.build[data.next_skyline_cand].height > data.build[data.current_skyline].height) {
+            data.current_skyline = data.next_skyline_cand;
+        }
+
+        ++data.next_skyline_cand;
+    }
+
     printf("%d %d", data.build[data.current_skyline].left, data.build[data.current_skyline].height);
 
     while (data.next_skyline_cand < data.build_count) {
