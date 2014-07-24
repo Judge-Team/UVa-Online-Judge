@@ -3,6 +3,8 @@ language: c
 compiler:
     - gcc
 
+env: CTEST_OUTPUT_ON_FAILURE=1
+
 install:
     - sudo pip install cpp-coveralls --use-mirrors
     - sudo apt-get update -qq
