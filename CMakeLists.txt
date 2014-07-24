@@ -6,6 +6,11 @@ if(${CMAKE_C_COMPILER_ID} STREQUAL "GNU" OR
         set(CMAKE_C_FLAGS "-lm -lcrypt -O2 -pipe -ansi -DONLINE_JUDGE ${CMAKE_C_FLAGS}")
 endif()
 
+if(${CMAKE_CXX_COMPILER_ID} STREQUAL "GNU" OR
+    ${CMAKE_CXX_COMPILER_ID} STREQUAL "Clang")
+        set(CMAKE_CXX_FLAGS "-lm -lcrypt -O2 -pipe -DONLINE_JUDGE ${CMAKE_CXX_FLAGS}")
+endif()
+
 configure_file(
     ${PROJECT_SOURCE_DIR}/test.in
     ${PROJECT_BINARY_DIR}/test
