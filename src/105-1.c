@@ -50,40 +50,17 @@ int handle_skyline_end_with_next(struct Data *data)
 
     new_current_skyline = find_next_skyline_in_research(data);
 
-    if (data->pos < data->build[data->next_skyline_cand].left) {
-        if (new_current_skyline == -1) {
-            printf(" %d %d", data->pos, 0);
-            data->current_skyline = data->next_skyline_cand;
-            ++data->next_skyline_cand;
-            printf(" %d %d", data->build[data->current_skyline].left, data->build[data->current_skyline].height);
-            data->pos = data->build[data->current_skyline].left + 1;
-        } else {
-            if (data->build[new_current_skyline].height != data->build[data->current_skyline].height) {
-                printf(" %d %d", data->pos, data->build[new_current_skyline].height);
-            }
-            data->current_skyline = new_current_skyline;
-        }
+    if (new_current_skyline == -1) {
+        printf(" %d %d", data->pos, 0);
+        data->current_skyline = data->next_skyline_cand;
+        ++data->next_skyline_cand;
+        printf(" %d %d", data->build[data->current_skyline].left, data->build[data->current_skyline].height);
+        data->pos = data->build[data->current_skyline].left + 1;
     } else {
-        if (new_current_skyline == -1) {
-            new_current_skyline = data->next_skyline_cand;
-            if (data->build[new_current_skyline].height != data->build[data->current_skyline].height) {
-                printf(" %d %d", data->build[new_current_skyline].left, data->build[new_current_skyline].height);
-            }
-            data->current_skyline = data->next_skyline_cand;
-            ++data->next_skyline_cand;
-            printf(" %d %d", data->build[data->current_skyline].left, data->build[data->current_skyline].height);
-            data->pos = data->build[data->current_skyline].left + 1;
-        } else {
-            if (data->build[new_current_skyline].height < data->build[data->next_skyline_cand].height) {
-                new_current_skyline = data->next_skyline_cand;
-                ++data->next_skyline_cand;
-            }
-            if (data->build[new_current_skyline].height != data->build[data->current_skyline].height) {
-                printf(" %d %d", data->build[new_current_skyline].left, data->build[new_current_skyline].height);
-            }
-            data->current_skyline = new_current_skyline;
-            data->pos = data->build[new_current_skyline].left + 1;
+        if (data->build[new_current_skyline].height != data->build[data->current_skyline].height) {
+            printf(" %d %d", data->pos, data->build[new_current_skyline].height);
         }
+        data->current_skyline = new_current_skyline;
     }
 }
 
