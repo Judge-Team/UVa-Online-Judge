@@ -1,3 +1,4 @@
+#include<string.h>
 #include<cstdio>
 #include<cmath>
 #include<vector>
