@@ -9,7 +9,7 @@ install:
     - sudo apt-get install -qq cmake
 
 script:
-    - cmake .
+    - cmake . -DCMAKE_C_FLAGS=--coverage
     - make
     - make test
 
