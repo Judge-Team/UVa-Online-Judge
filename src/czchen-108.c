@@ -66,7 +66,7 @@ int main(int argc, char *argv[])
          * i, j here is row number.
          */
         for (i = 0; i < dim; ++i) {
-            for (j = j + 1; j < dim + 1; ++j) {
+            for (j = i + 1; j < dim + 1; ++j) {
                 /* Kadane's Algorithm */
 
                 int current_max = matrix[j][0] - matrix[i][0];
