@@ -88,7 +88,7 @@ int main()
 
 
 		for ( i = 0 ; i < 2*M ; i++ ){
-			fscanf(in,"%d%d",&vertex,&link);   
+			fscanf(in,"%d%d",&vertex,&link);
 			// add node
 			index[i] = i;
 			head[i] = vertex;
@@ -112,7 +112,7 @@ int main()
 		for ( i = 0 ; i < N ; i++ ){
 			if ( adj[i] != -1 ){
 				color[i] = WHITE;
-				pie[i] = -1; 
+				pie[i] = -1;
 			} else {
 				color[i] = BLACK;
 				pie[i] = -1;

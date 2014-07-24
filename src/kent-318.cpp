@@ -1,5 +1,6 @@
 #include <stdio.h>
 #include <stdlib.h>
+#include <string.h>
 
 #define	MAX_N		501
 #define	INFINITE 	999999999
@@ -49,7 +50,7 @@ int main()
 	for ( counter = 1 ; scanf("%d%d",&node_num,&link_num) != EOF ; counter++ ){
 		if ( node_num == 0 && link_num == 0 )
 			break;
-		// init 
+		// init
 		for ( i = 0 ; i < MAX_N ; i++ ){
 			for ( j = 0 ; j < MAX_N ; j++ ){
 				adj[i][j] = 0;
@@ -69,7 +70,7 @@ int main()
 			adj[dst][src] = cost;
 		}
 
-		// run Dijkstra algorithm 
+		// run Dijkstra algorithm
 
 		for ( i = 1 ; i <= node_num ; i++ ){
 			u = find_minimum_u();
@@ -112,7 +113,7 @@ int main()
 
 		printf("System #%d\n",counter);
 		if ( flag == 1 ){
-			printf("The last domino falls after %0.1lf seconds, between key dominoes %d and %d.\n",finish_time , a , b );	
+			printf("The last domino falls after %0.1lf seconds, between key dominoes %d and %d.\n",finish_time , a , b );
 		} else {
 			printf("The last domino falls after %0.1lf seconds, at key domino %d.\n",finish_time,u);
 		}

@@ -1,6 +1,7 @@
 #include <stdlib.h>
 #include <stdio.h>
 #include <cstdio>
+#include <string.h>
 #include <map>
 #include <algorithm>
 using namespace std;
