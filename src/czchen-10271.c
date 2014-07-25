@@ -49,37 +49,56 @@ int main(int argc, char *argv[])
         }
 
         /*
-         * B[i, j] = badness value using chopstick from 0 ~ i, with j pairs.
+         * The problem can be solved by the following DP:
+         *
+         * B[i, j] = badness value using chopstick from i ~ max, with j pairs.
          * b[i, j] = badness value when pairing i-th and j-th chopsticks.
          *
-         * B[i, j] = min | B[i-1, j]
-         *               | B[i-2, j-1] + b[i-1, i]
+         * B[i, j] = | if (max - i) == j * 3
+         *           |     B[i+3, j-1] + b[i, i+1] <- lock scenario.
+         *           | else
+         *           |     min(B[i+1, j], B[i+2, j-1] + b[i, i+1])
+         *
+         * start with B[max-3][1] = b[max-3][max-2]
          */
 
         /*
-         * Fill all buf[x * 2][x] since it only contains one valid cases.
+         * Initial condition
          */
-        memset(buf, 0, sizeof(buf));
-        for (pair_iter = 1; pair_iter <= pair_count; ++pair_iter) {
-            buf[pair_iter * 2][pair_iter] =
-                cal_badness(chopstick[pair_iter * 2 - 2], chopstick[pair_iter * 2 - 1]) +
-                buf[(pair_iter - 1) * 2][pair_iter - 1];
-        }
+        buf[chopstick_count - 3][1] = cal_badness(chopstick[chopstick_count - 2], chopstick[chopstick_count - 3]);
 
-        /*
-         * B[i, j] = min | B[i-1, j]
-         *               | B[i-2, j-1] + b[i-1, i]
-         */
         for (pair_iter = 1; pair_iter <= pair_count; ++pair_iter) {
-            for (chopstick_iter = pair_iter * 2 + 1; chopstick_iter < chopstick_count; ++chopstick_iter) {
+            chopstick_iter = chopstick_count - pair_iter * 3;
+
+            /*
+             * Lock scenario.
+             */
+            buf[chopstick_iter][pair_iter] =
+                buf[chopstick_iter+3][pair_iter-1] +
+                cal_badness(chopstick[chopstick_iter], chopstick[chopstick_iter+1]);
+
+            --chopstick_iter;
+            for (; chopstick_iter >= 0; --chopstick_iter) {
                 buf[chopstick_iter][pair_iter] = min(
-                    buf[chopstick_iter - 1][pair_iter],
-                    buf[chopstick_iter - 2][pair_iter - 1] + cal_badness(chopstick[chopstick_iter -1], chopstick[chopstick_iter])
+                    buf[chopstick_iter+1][pair_iter],
+                    buf[chopstick_iter+2][pair_iter-1] + cal_badness(chopstick[chopstick_iter], chopstick[chopstick_iter+1])
                 );
             }
         }
 
-        printf("%d\n", buf[chopstick_count - 1][pair_count]);
+
+#if DEBUG
+        printf("### final buf ###\n");
+        for (chopstick_iter = 0; chopstick_iter < chopstick_count; ++chopstick_iter) {
+            printf("[%d]\t", chopstick_iter);
+            for (pair_iter = 0; pair_iter <= pair_count; ++pair_iter) {
+                printf("%d\t", buf[chopstick_iter][pair_iter]);
+            }
+            printf("\n");
+        }
+#endif
+
+        printf("%d\n", buf[0][pair_count]);
     }
 
     return 0;
