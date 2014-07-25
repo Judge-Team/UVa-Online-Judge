@@ -62,14 +62,14 @@ int main(int argc, char *argv[])
          * The problem can be solved by the following DP:
          *
          * B[c, p] = badness value using chopstick from i ~ max, with j pairs.
-         * b[c, p] = badness value when pairing i-th and j-th chopsticks.
+         * b[c]    = badness value when pairing c-th and c-th + 1 chopsticks.
          *
          * B[c, p] = | if (max-c) == p * 3
-         *           |     B[c+3, p-1] + b[c, c+1] <- lock scenario.
+         *           |     B[c+3, p-1] + b[c] <- lock scenario.
          *           | else
-         *           |     min(B[c+1, p], B[c+2, p-1] + b[c, c+1])
+         *           |     min(B[c+1, p], B[c+2, p-1] + b[c])
          *
-         * start with B[max-3][1] = b[max-2][max-3]
+         * start with B[max-3][1] = b[max-3]
          */
 
         /*
