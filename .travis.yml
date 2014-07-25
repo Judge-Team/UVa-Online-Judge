@@ -11,7 +11,7 @@ install:
     - sudo apt-get install -qq cmake
 
 script:
-    - cmake . -DCMAKE_C_FLAGS=--coverage -DCMAKE_CXX_FLAGS=--coverage
+    - cmake . -DCMAKE_C_FLAGS='-O0 --coverage' -DCMAKE_CXX_FLAGS='-O0 --coverage'
     - make
     - make test
 
