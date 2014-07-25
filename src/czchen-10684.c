@@ -21,6 +21,7 @@ int main(int argc, char *argv[])
             break;
         }
 
+        /* Kadane's Algorithm */
         for (i = 0; i < count; ++i) {
             scanf("%d", &x);
 
