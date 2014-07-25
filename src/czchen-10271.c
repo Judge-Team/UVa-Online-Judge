@@ -61,7 +61,7 @@ int main(int argc, char *argv[])
         /*
          * The problem can be solved by the following DP:
          *
-         * B[c, p] = badness value using chopstick from i ~ max, with j pairs.
+         * B[c, p] = badness value using chopstick from c ~ max, with p pairs.
          * b[c]    = badness value when pairing c-th and c-th + 1 chopsticks.
          *
          * B[c, p] = | if (max-c) == p * 3
