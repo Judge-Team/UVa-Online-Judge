@@ -78,7 +78,7 @@ void has_negative_cycle(int start, double data[MAX_DIM][MAX_DIM], int dim, struc
         if (curr[start].cost >= 1.01) {
             /*
              * Update ans only when there is no solution, or the current
-             * solution is shortest then previous one.
+             * solution is shorter then previous one.
              */
             if (!ans->solved || curr[start].path_len < ans->path_len) {
                 ans->solved = 1;
