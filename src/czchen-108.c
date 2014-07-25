@@ -33,6 +33,23 @@ int main(int argc, char *argv[])
         /* Initial max to first element of matrix. */
         result = matrix[1][0];
 
+        /*
+         * 1. calculate the vertical prefix sum (cumulative sum) for all
+         *    columns (an O(n^2) algorithm).
+         * 2. assume that the maximum sub-array will be between row a and row
+         *    b, inclusive. There are only O(n^2) a, b pairs such that a < b.
+         *    Try each of them.
+         * 3. Since we already have the vertical prefix sum for all columns,
+         *    the sum of elements in arr[a..b][c] for column c can be computed
+         *    in * O(1) time. This allows us to imagine each column sum as if
+         *    it is a * single element of a one-dimensional array across all
+         *    columns (one dimensional array with one row and n columns).
+         *    There's an O(n) algorithm to compute the maximum sub-array for a
+         *    one-dimensional array, known as Kadane's Algorithm.
+         * 4. Applying the Kadane's algorithm inside each a and b combination
+         *    gives the total complexity of O(n^3).
+         */
+
 #if DEBUG
         printf("original matrix:\n");
         for (i = 0; i < dim + 1; ++i) {
@@ -44,7 +61,7 @@ int main(int argc, char *argv[])
 #endif
 
         /*
-         * convert to column accumulation matrix.
+         * convert to row cumulative sum matrix.
          */
         for (i = 1; i < dim + 1; ++i) {
             for (j = 0; j < dim; ++j) {
@@ -67,8 +84,9 @@ int main(int argc, char *argv[])
          */
         for (i = 0; i < dim; ++i) {
             for (j = i + 1; j < dim + 1; ++j) {
-                /* Kadane's Algorithm */
-
+                /*
+                 * Kadane's algorithm
+                 */
                 int current_max = matrix[j][0] - matrix[i][0];
                 int right_max = current_max;
 
