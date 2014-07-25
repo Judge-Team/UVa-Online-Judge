@@ -41,9 +41,9 @@ int main(int argc, char *argv[])
          *    Try each of them.
          * 3. Since we already have the vertical prefix sum for all columns,
          *    the sum of elements in arr[a..b][c] for column c can be computed
-         *    in * O(1) time. This allows us to imagine each column sum as if
-         *    it is a * single element of a one-dimensional array across all
-         *    columns (one dimensional array with one row and n columns).
+         *    in O(1) time. This allows us to imagine each column sum as if it
+         *    is a single element of a one-dimensional array across all columns
+         *    (one dimensional array with one row and n columns).
          *    There's an O(n) algorithm to compute the maximum sub-array for a
          *    one-dimensional array, known as Kadane's Algorithm.
          * 4. Applying the Kadane's algorithm inside each a and b combination
