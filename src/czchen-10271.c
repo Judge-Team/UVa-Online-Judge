@@ -65,7 +65,7 @@ int main(int argc, char *argv[])
          * b[c]    = badness value when pairing c-th and c-th + 1 chopsticks.
          *
          * B[c, p] = | if (max-c) == p * 3
-         *           |     B[c+3, p-1] + b[c] <- lock scenario.
+         *           |     min(B[c+3, p-1], B[c+2, p-1]) + b[c] <- lock scenario.
          *           | else
          *           |     min(B[c+1, p], B[c+2, p-1] + b[c])
          *
@@ -84,7 +84,8 @@ int main(int argc, char *argv[])
              * Lock scenario.
              */
             buf[chopstick_iter][pair_iter] =
-                buf[chopstick_iter+3][pair_iter-1] + badness[chopstick_iter];
+                min(buf[chopstick_iter+3][pair_iter-1], buf[chopstick_iter+2][pair_iter-1]) +
+                badness[chopstick_iter];
 
             --chopstick_iter;
             for (; chopstick_iter >= 0; --chopstick_iter) {
