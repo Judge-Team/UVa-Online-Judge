@@ -22,11 +22,13 @@ set(TEST_DIR ${PROJECT_BINARY_DIR}/bin)
 execute_process(COMMAND ${CMAKE_COMMAND} -E make_directory ${TEST_DIR})
 
 enable_testing()
+add_custom_target(check COMMAND ${CMAKE_CTEST_COMMAND})
 
 file(GLOB all_src ${PROJECT_SOURCE_DIR}/src/*)
 foreach(src ${all_src})
     get_filename_component(exec_name ${src} NAME_WE)
     add_executable(${exec_name} ${src})
+    add_dependencies(check ${exec_name})
     set_target_properties(${exec_name} PROPERTIES
         RUNTIME_OUTPUT_DIRECTORY ${TEST_DIR}
     )
