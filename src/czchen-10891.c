@@ -22,6 +22,7 @@ int main(int argc, char *argv[])
 
     int i;
     int j;
+    int k;
     int len;
 
     while (scanf("%d", &count) == 1) {
@@ -75,30 +76,25 @@ int main(int argc, char *argv[])
         }
         printf("\n");
 #endif
-
-        for (len = 1; len < count; ++len) {
+        for (len = 1; len <= count; ++len) {
             for (i = 0; i + len < count; ++i) {
-                /*
-                 * show hand
-                 */
-                best[i][i+len] = VALUE(i, j);
+                j = i + len;
 
-#if DEBUG
-                printf("best[%d][%d] = %d\n", i, i+len, best[i][i+len]);
-#endif
+                best[i][j] = VALUE(i, j);
 
-                for (j = i; j < i + len; ++j) {
-                    best[i][i+len] = max(
-                        best[i][i+len],
-                        VALUE(i, j) - best[j+1][i+len]
+                for (k = i; k < j; ++k) {
+                    best[i][j] = max(
+                        best[i][j],
+                        VALUE(i, k) - best[k+1][j]
                     );
 
-                    best[i][i+len] = max(
-                        best[i][i+len],
-                        VALUE(j+1, i+len) - best[i][j]
+                    best[i][j] = max(
+                        best[i][j],
+                        VALUE(k+1, j) - best[i][k]
                     );
                 }
             }
+
 #if DEBUG
             printf("---\n");
             for (i = 0; i < count; ++i) {
