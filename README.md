@@ -6,6 +6,9 @@
 
 [UVa Online Judge](http://uva.onlinejudge.org/)
 
+# Leaderboard
+*   [czchen](http://uhunt.felix-halim.net/id/571324)
+
 # Reference
 *   [Algorithmist](http://www.algorithmist.com/index.php/Main_Page)
 *   [CS342800-高等程式設計--王炳豐老師](http://clark.cs.nthu.edu.tw/~adv_prog/)
