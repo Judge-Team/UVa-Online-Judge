@@ -9,6 +9,7 @@
 # Leaderboard
 *   [czchen](http://uhunt.felix-halim.net/id/571324)
 *   [zsshen](http://uhunt.felix-halim.net/id/45566)
+*   [Kent Huang](http://uhunt.felix-halim.net/id/43598)
 
 # Reference
 *   [Algorithmist](http://www.algorithmist.com/index.php/Main_Page)
