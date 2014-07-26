@@ -9,7 +9,7 @@ int min(int x, int y)
     return x > y ? y : x;
 }
 
-#define COST(i,j) (cost[j+1] - cost[i])
+#define COST(i,j) (cost[(j)+1] - cost[(i)])
 
 int main(int argc, char *argv[])
 {
