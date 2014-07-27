@@ -1,14 +1,53 @@
-#!/bin/sh
+#!/usr/bin/env python3
+import filecmp
+import glob
+import os
+import subprocess
+import sys
 
-CASE=$1
-ID=`echo ${CASE} | cut -d - -f 2`
-SRC=@PROJECT_SOURCE_DIR@
-BIN=@PROJECT_BINARY_DIR@
+SRC = '@PROJECT_SOURCE_DIR@'
+BIN = '@PROJECT_BINARY_DIR@'
 
-EXEC=${BIN}/bin/${CASE}
-IN=${SRC}/data/${ID}.in
-OUT=${SRC}/data/${CASE}.out
-ANS=${SRC}/data/${ID}.ans
+def input_to_expect(input):
+    return input[:-3] + '.ans'
 
-${EXEC} < ${IN} > ${OUT}
-diff ${OUT} ${ANS}
+def input_to_output(input):
+    return input[:-3] + '.out'
+
+def run_test(prog, input):
+    output = input_to_output(input)
+    expect = input_to_expect(input)
+
+    with open(input, 'r') as stdin, open(output, 'w') as stdout:
+        subprocess.call(prog, stdin=stdin, stdout=stdout)
+
+    res = filecmp.cmp(output, expect)
+
+    if not res:
+        print('input {} fails'.format(input), file=sys.stderr)
+
+    return res
+
+def main():
+    if len(sys.argv) != 2:
+        return -1
+
+    prog = os.path.join(BIN, 'bin', sys.argv[1])
+
+    case = sys.argv[1].split('-')[1]
+
+    input  = os.path.join(SRC, 'data', '{}.in'.format(case))
+
+    res = run_test(prog, input)
+    if not res:
+        return -1
+
+    for input in glob.iglob(os.path.join(SRC, 'data', '{}-*.in'.format(case))):
+        res = run_test(prog, input)
+        if not res:
+            return -1
+
+    return 0
+
+if __name__ == '__main__':
+    sys.exit(main())

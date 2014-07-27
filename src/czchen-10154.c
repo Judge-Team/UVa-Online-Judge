@@ -51,7 +51,6 @@ int main(int argc, char *argv[])
 #endif
 
     while (scanf("%d %d", &turtle[turtle_count].weight, &turtle[turtle_count].carry) == 2) {
-        turtle[turtle_count].carry -= turtle[turtle_count].weight;
         ++turtle_count;
     }
 
@@ -104,7 +103,7 @@ int main(int argc, char *argv[])
          * Find the first id what has cnt turtles
          */
         for (id = cnt-1; id < turtle_count; ++id) {
-            if (prev[id-1] != INVALID && turtle[id].carry >= prev[id-1]) {
+            if (prev[id-1] != INVALID && turtle[id].carry - turtle[id].weight >= prev[id-1]) {
                 curr[id] = prev[id-1] + turtle[id].weight;
                 break;
             }
@@ -133,7 +132,7 @@ int main(int argc, char *argv[])
 
         for (; id < turtle_count; ++id) {
             curr[id] = curr[id-1];
-            if (turtle[id].carry >= prev[id-1]) {
+            if (turtle[id].carry - turtle[id].weight >= prev[id-1]) {
                 curr[id] = min(curr[id], prev[id-1] + turtle[id].weight);
             }
         }
