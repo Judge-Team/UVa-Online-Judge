@@ -33,5 +33,5 @@ foreach(src ${all_src})
         RUNTIME_OUTPUT_DIRECTORY ${TEST_DIR}
     )
 
-    add_test(test-${exec_name} ${PROJECT_BINARY_DIR}/test ${exec_name} ${PROJECT_SOURCE_DIR} ${PROJECT_BINARY_DIR})
+    add_test(test-${exec_name} ${PROJECT_BINARY_DIR}/test ${exec_name})
 endforeach()
