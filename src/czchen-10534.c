@@ -78,7 +78,7 @@ int main()
 #endif
 
         for (cnt = 2; cnt <= count; ++cnt) {
-            for (i = cnt-1; i < MAX_COUNT; ++i) {
+            for (i = cnt-1; i < count; ++i) {
                 if (prev[i-1] != INVALID && prev[i-1] < item[i]) {
                     curr[i] = item[i];
                     head[i] = cnt;
@@ -90,7 +90,7 @@ int main()
 
             ++i;
 
-            for (; i < MAX_COUNT; ++i) {
+            for (; i < count; ++i) {
                 curr[i] = curr[i-1];
                 if (prev[i-1] < item[i]) {
                     curr[i] = min(curr[i], item[i]);
