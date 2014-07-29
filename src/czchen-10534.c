@@ -77,7 +77,7 @@ int main()
         printf("\n");
 #endif
 
-        for (cnt = 2; cnt <= count; ++cnt) {
+        for (cnt = 2; cnt <= count/2+1; ++cnt) {
             for (i = cnt-1; i < count; ++i) {
                 if (prev[i-1] != INVALID && prev[i-1] < item[i]) {
                     curr[i] = item[i];
@@ -134,7 +134,7 @@ int main()
         printf("\n");
 #endif
 
-        for (cnt = 2; cnt <= count; ++cnt) {
+        for (cnt = 2; cnt <= count/2+1; ++cnt) {
             for (i = count-cnt; i >= 0; --i) {
                 if (prev[i+1] != INVALID && prev[i+1] < item[i]) {
                     curr[i] = item[i];
