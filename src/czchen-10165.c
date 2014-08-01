@@ -2,13 +2,10 @@
 
 int main()
 {
-    int count;
-    int item;
-    int ans;
-    int i;
-
-    int pile_single;
-    int pile_many;
+    unsigned int count;
+    unsigned int item;
+    unsigned int ans;
+    unsigned int i;
 
     while (scanf("%d", &count) == 1) {
         if (count == 0) {
