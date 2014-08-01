@@ -17,7 +17,7 @@ int main()
     int m;
     int max_m;
     int move[MAX_M];
-    int res[MAX_N+1];
+    char res[MAX_N+1];
 
     int i;
     int j;
@@ -26,21 +26,37 @@ int main()
         scanf("%d", &m);
         for (i = 0; i < m; ++i) {
             scanf("%d", &move[i]);
-            max_m = max(max_m, move[i]);
         }
 
+#if DEBUG
+        printf("move = ");
+        for (i = 0; i < m; ++i) {
+            printf("%d ", move[i]);
+        }
+        printf("\n");
+#endif
+
         /*
-         * Remove 1 because we will handle it separately.
+         * Remove 1 and > n
          */
-        if (move[m-1] != 1) {
-            for (i = 0; i < m; ++i) {
-                if (move[i] == 1) {
-                    move[i] = move[m-1];
-                    break;
-                }
+        max_m = 0;
+        for (i = 0; i < m; ++i) {
+            if (move[i] == 1 || move[i] > n) {
+                memmove(&move[i], &move[i+1], m-i);
+                --m;
+                --i;
+            } else {
+                max_m = max(max_m, move[i]);
             }
         }
-        --m;
+
+#if DEBUG
+        printf("move = ");
+        for (i = 0; i < m; ++i) {
+            printf("%d ", move[i]);
+        }
+        printf("\n");
+#endif
 
         /*
          * res[n] = | 1 if current user wins
@@ -67,6 +83,7 @@ int main()
         }
 
 #if DEBUG
+        printf("res = ");
         for (i = 0; i <= n; ++i) {
             printf("%d ", res[i]);
         }
@@ -88,6 +105,7 @@ int main()
         }
 
 #if DEBUG
+        printf("res = ");
         for (i = 0; i <= n; ++i) {
             printf("%d ", res[i]);
         }
@@ -105,6 +123,7 @@ int main()
         }
 
 #if DEBUG
+        printf("res = ");
         for (i = 0; i <= n; ++i) {
             printf("%d ", res[i]);
         }
