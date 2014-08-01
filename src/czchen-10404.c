@@ -42,7 +42,7 @@ int main()
         max_m = 0;
         for (i = 0; i < m; ++i) {
             if (move[i] == 1 || move[i] > n) {
-                memmove(&move[i], &move[i+1], m-i);
+                memmove(&move[i], &move[i+1], sizeof(move[0]) * (m-i-1));
                 --m;
                 --i;
             } else {
