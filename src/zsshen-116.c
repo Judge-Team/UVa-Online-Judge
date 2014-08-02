@@ -81,11 +81,11 @@ int main() {
         printf("STEP:\n");
         for (i = 1 ; i <= num_row ; i++) {
             for (j = 2 ; j <= num_col ; j++)
-                printf("%5ld ", dp[i][j]);
+                printf("%5d ", step[i][j]);
             printf("\n");
         }
         printf("\n");
-        */    
+        */
 
         min_val = dp[1][num_col];
         row_idx = 1;
@@ -93,6 +93,9 @@ int main() {
             if (dp[i][num_col] < min_val) {
                 min_val = dp[i][num_col];
                 row_idx = i;
+            } else if (dp[i][num_col] == min_val) {
+                if (check_order(&step, row_idx, i, num_col) == false)
+                    row_idx = i;
             }
         }
 
@@ -134,6 +137,15 @@ bool check_order(char (*p_step)[MAX_ROW_COUNT][MAX_COL_COUNT], int src_row, int 
             break;        
         }
     }
+    
+    /*
+    for (i = 1 ; i <= pred_col ; i++)
+        printf("%3d ", line_src[i]);
+    printf("\n");
+    for (i = 1 ; i <= pred_col ; i++)
+        printf("%3d ", line_tge[i]);
+    printf("\n");
+    */
 
     return check;
 }
