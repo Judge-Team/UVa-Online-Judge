@@ -3,7 +3,7 @@
 #include <stdbool.h>
 
 
-#define MAX_ROW_COUNT 11
+#define MAX_ROW_COUNT 21
 #define MAX_COL_COUNT 101
 
 
@@ -22,7 +22,7 @@ int main() {
         /**
          * Recursive Formula:
          * 
-         * dp[i][j] = input[i][j] + Min{dp[i - 1][j - 1], dp[i][j - 1], dp[i + 1][j - 1]}
+         * dp[i][j] = input[i][j] + Min{dp[i - 1][j + 1], dp[i][j + 1], dp[i + 1][j + 1]}
          * Let S denote the set containing the row indicies of the elements with minimum value.  
          * step[i][j] = Min{row | row belonged to S}
          */
@@ -32,7 +32,6 @@ int main() {
 
         for (j = num_col - 1 ; j >= 1 ; j--) {
             for (i = 1 ; i <= num_row ; i++) {
-            
                 /* Check dp[i - 1][j + 1]*/                
                 k = i - 1;
                 if (k < 1)
