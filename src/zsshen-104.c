@@ -8,7 +8,7 @@
 
 
 int main() {
-    int node_u, node_v, inter, category, step, length;
+    int u, v, inter, category, step, length;
     bool found_ans;
     double new_weight;
     double weight[MAX_CATEGORY][MAX_CATEGORY];
@@ -18,43 +18,50 @@ int main() {
 
     while (scanf("%d", &category) != EOF) {
         
-        for (node_u = 1 ; node_u <= category ; node_u++) {
-            for (node_v = 1 ; node_v <= category ; node_v++) {
-                if (node_u != node_v)
-                    scanf("%lf", &(weight[node_u][node_v]));
+        for (u = 1 ; u <= category ; u++) {
+            for (v = 1 ; v <= category ; v++) {
+                if (u != v)
+                    scanf("%lf", &(weight[u][v]));
                 else
-                    weight[node_u][node_v] = 1;
+                    weight[u][v] = 1;
             }
         }
 
         for (step = 1 ; step <= category ; step++) {
-            for (node_u = 1 ; node_u <= category ; node_u++) {
-                for (node_v = 1 ; node_v <= category ; node_v++) {
+            for (u = 1 ; u <= category ; u++) {
+                for (v = 1 ; v <= category ; v++) {
                     if (step == 1) {
-                        dp[node_u][node_v][step] = weight[node_u][node_v];
-                        path[node_u][node_v][step] = node_u;
+                        dp[step][u][v] = weight[u][v];
+                        path[step][u][v] = u;
                     } else
-                        dp[node_u][node_v][step] = 1;
+                        dp[step][u][v] = -1;
                 }
             }
         }
 
+        /**
+         * Recursive formula:
+         * 1. dp[num][u][v]   : The maximum profit from currency "u" to currency "v" with "num" transition steps.
+         * 2. path[num][u][v] : Under the above profit, the predecessor of currency "v".
+         * 
+         * 3. dp[num][u][v] = Max{dp[num - 1][u][inter] * weight[inter][v] | 1 <= k <= total_currency}
+         */
+
         found_ans = false;
         for (step = 2 ; step <= category ; step++) {
             for (inter = 1 ; inter <= category ; inter++) {
-                for (node_u = 1 ; node_u <= category ; node_u++) {
-                    for (node_v = 1 ; node_v <= category ; node_v++) {
+                for (u = 1 ; u <= category ; u++) {
+                    for (v = 1 ; v <= category ; v++) {
 
-                        new_weight = dp[node_u][inter][step - 1] * weight[inter][node_v];
-                        if (new_weight > dp[node_u][node_v][step]) {
-                            dp[node_u][node_v][step] = new_weight;
-                            path[node_u][node_v][step] = inter;
+                        new_weight = dp[step - 1][u][inter] * weight[inter][v];
+                        if (new_weight > dp[step][u][v]) {
+                            dp[step][u][v] = new_weight;
+                            path[step][u][v] = inter;
                         }
 
-                        if ((node_u == node_v) && (dp[node_u][node_v][step] > TARGET_PROFIT)) {
+                        if ((u == v) && (dp[step][u][v] > TARGET_PROFIT)) {
                             length = step;
                             found_ans = true;
-                            //printf("%d %d %d %d\n", step, inter, node_u, node_v);
                             goto EXIT;
                         }
                     }
@@ -64,14 +71,14 @@ int main() {
 
         EXIT:
         if (found_ans == true) {
-            cycle[length] = node_v;
-            while (length > 0) {
-                node_v = path[node_u][node_v][length];
-                cycle[length] = node_v;
+            cycle[length] = v;
+            while (length >= 0) {
+                v = path[length][u][v];
+                cycle[length - 1] = v;
                 length--;
             }
-            cycle[length] = node_u;
 
+            length++;
             while (length < step) {
                 printf("%d ", cycle[length]);
                 length++;
