@@ -32,6 +32,8 @@ def main():
     if len(sys.argv) != 2:
         return -1
 
+    pass_ = True
+
     prog = os.path.join(BIN, 'bin', sys.argv[1])
 
     case = sys.argv[1].split('-')[1]
@@ -40,14 +42,14 @@ def main():
 
     res = run_test(prog, input)
     if not res:
-        return -1
+        pass_ = False
 
     for input in glob.iglob(os.path.join(SRC, 'data', '{}-*.in'.format(case))):
         res = run_test(prog, input)
         if not res:
-            return -1
+            pass_ = False
 
-    return 0
+    return 0 if pass_ else -1
 
 if __name__ == '__main__':
     sys.exit(main())
