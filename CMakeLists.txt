@@ -24,6 +24,12 @@ execute_process(COMMAND ${CMAKE_COMMAND} -E make_directory ${TEST_DIR})
 enable_testing()
 add_custom_target(check COMMAND ${CMAKE_CTEST_COMMAND})
 
+set(SKIP_CASES
+    czchen-104
+    zsshen-104
+    zsshen-147
+)
+
 file(GLOB all_src ${PROJECT_SOURCE_DIR}/src/*)
 foreach(src ${all_src})
     get_filename_component(exec_name ${src} NAME_WE)
@@ -33,5 +39,8 @@ foreach(src ${all_src})
         RUNTIME_OUTPUT_DIRECTORY ${TEST_DIR}
     )
 
-    add_test(test-${exec_name} ${PROJECT_BINARY_DIR}/test ${exec_name})
+    list(FIND SKIP_CASES "${exec_name}" idx)
+    if (${idx} EQUAL -1)
+        add_test(test-${exec_name} ${PROJECT_BINARY_DIR}/test ${exec_name})
+    endif()
 endforeach()
