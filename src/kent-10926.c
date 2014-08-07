@@ -27,7 +27,7 @@ void initColor()
 
 int DFS_Visit(int job)
 {
-    int i, j;
+    int i;
     int count = 0;
     if (color[job] != 0){
         return 0;
