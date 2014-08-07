@@ -1,6 +1,7 @@
 #include <limits.h>
 #include <math.h>
 #include <stdio.h>
+#include <stdlib.h>
 
 enum {
     MAX_RESTAURANT = 200,
@@ -14,6 +15,11 @@ struct DepotLocation {
         int serve_start;
         int serve_end;
     } depot[MAX_DEPOT];
+};
+
+struct SingleDepotCostCache {
+    int depot;
+    int cost;
 };
 
 #if DEBUG
@@ -86,14 +92,13 @@ int main(int argc, char *argv[])
     int n;
     int iter;
 
+    struct SingleDepotCostCache cost_cache[MAX_RESTAURANT][MAX_RESTAURANT];
+
     struct DepotLocation buf1[MAX_RESTAURANT];
     struct DepotLocation buf2[MAX_RESTAURANT];
 
     struct DepotLocation *curr = buf1;
     struct DepotLocation *prev = buf2;
-
-    int curr_depot;
-    int curr_cost;
 
     for (iter = 0; scanf("%d%d", &rest_count, &depot_count) == 2; ++iter) {
         if (rest_count == 0 && depot_count == 0) {
@@ -113,12 +118,20 @@ int main(int argc, char *argv[])
          */
 
         /*
+         * Cache all cost(i, j, 1)
+         */
+        for (i = 0; i < rest_count; ++i) {
+            for (j = i; j < rest_count; ++j) {
+                find_best_depot(rest, i, j, &cost_cache[i][j].depot, &cost_cache[i][j].cost);
+            }
+        }
+
+        /*
          * Fill cost(0, i, 1)
          */
-        for (i = 0; i <= rest_count; ++i) {
-            find_best_depot(rest, 0, i, &curr_depot, &curr_cost);
-            curr[i].cost = curr_cost;
-            curr[i].depot[0].loc = curr_depot;
+        for (i = 0; i < rest_count; ++i) {
+            curr[i].cost = cost_cache[0][i].cost;
+            curr[i].depot[0].loc = cost_cache[0][i].depot;
             curr[i].depot[0].serve_start = 0;
             curr[i].depot[0].serve_end = i;
         }
@@ -142,21 +155,18 @@ int main(int argc, char *argv[])
             for (; i < rest_count; ++i) {
                 j = n - 1;
 
-                find_best_depot(rest, j+1, i, &curr_depot, &curr_cost);
                 curr[i] = prev[j];
-                curr[i].cost += curr_cost;
-                curr[i].depot[n-1].loc = curr_depot;
+                curr[i].cost += cost_cache[j+1][i].cost;
+                curr[i].depot[n-1].loc = cost_cache[j+1][i].depot;
                 curr[i].depot[n-1].serve_start = j + 1;
                 curr[i].depot[n-1].serve_end = i;
 
                 ++j;
                 for (; j < i; ++j) {
-                    find_best_depot(rest, j+1, i, &curr_depot, &curr_cost);
-
-                    if (prev[j].cost + curr_cost < curr[i].cost) {
+                    if (prev[j].cost + cost_cache[j+1][i].cost < curr[i].cost) {
                         curr[i] = prev[j];
-                        curr[i].cost += curr_cost;
-                        curr[i].depot[n-1].loc = curr_depot;
+                        curr[i].cost += cost_cache[j+1][i].cost;
+                        curr[i].depot[n-1].loc = cost_cache[j+1][i].depot;
                         curr[i].depot[n-1].serve_start = j + 1;
                         curr[i].depot[n-1].serve_end = i;
                     }
@@ -169,8 +179,6 @@ int main(int argc, char *argv[])
 
         printf("Chain %d\n", iter+1);
         for (i = 0; i < depot_count; ++i) {
-            curr[rest_count-1].depot[i].loc;
-
             if (curr[rest_count-1].depot[i].serve_start == curr[rest_count-1].depot[i].serve_end) {
                 printf("Depot %d at restaurant %d serves restaurant %d\n",
                     i+1,
