@@ -8,11 +8,11 @@ int graph[26][26];
 int visitByDfs(int x) {
     int y;
     int count = 0;
-    
+
     if (color[x] == 0 || color[x] == 2) {
         return 0;
     }
-    
+
     color[x] = 2;
     count = 1;
     for (y = 0 ; y < 26; y++) {
@@ -61,7 +61,7 @@ int main() {
                 for (j = 0; buf[j] != '\0'; j++){
                     if (buf[j] >= 'A' && buf[j] <= 'Z'){
                         x = buf[j] - 'A';
-                        color[x] = 1;    
+                        color[x] = 1;
                     }
                 }
                 break;
@@ -81,4 +81,6 @@ int main() {
         }
         printf("There are %d tree(s) and %d acorn(s).\n",tree,acorn);
     }
+
+    return 0;
 }
