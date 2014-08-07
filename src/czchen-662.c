@@ -56,19 +56,15 @@ static void find_best_depot(
     int curr_depot;
     int curr_cost;
 
-    *cost = INT_MAX;
+    curr_depot = (start + end) / 2;
+    curr_cost = 0;
 
-    for (curr_depot = start; curr_depot <= end; ++curr_depot) {
-        curr_cost = 0;
-        for (i = start; i <= end; ++i) {
-            curr_cost += abs(rest[curr_depot] - rest[i]);
-        }
-
-        if (curr_cost < *cost) {
-            *cost = curr_cost;
-            *depot = curr_depot;
-        }
+    for (i = start, curr_cost = 0; i <= end; ++i) {
+        curr_cost += abs(rest[curr_depot] - rest[i]);
     }
+
+    *cost = curr_cost;
+    *depot = curr_depot;
 }
 
 static void swap(struct DepotLocation **x, struct DepotLocation **y)
@@ -115,7 +111,7 @@ int main(int argc, char *argv[])
          *
          * cost(0, i, n) = max { cost(0, j, n-1) + cost(j+1, i, 1) }
          *
-         * cost(i, j, 1) can be calculated by brute force.
+         * cost(i, j, 1) can be calculated by setting depot to (i + j) / 2.
          */
 
         /*
