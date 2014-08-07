@@ -115,6 +115,7 @@ int main(int argc, char *argv[])
          *
          * cost(0, i, n) = max { cost(0, j, n-1) + cost(j+1, i, 1) }
          *
+         * cost(i, j, 1) can be calculated by brute force.
          */
 
         /*
@@ -147,7 +148,7 @@ int main(int argc, char *argv[])
              * When restaurant count = depot count.
              */
             curr[i] = prev[i-1];
-            /* curr[i].cost = 0 */
+            /* curr[i].cost += cost_cache[i][i].cost (shall be 0 all the time) */
             curr[i].depot[i].loc = i;
             curr[i].depot[i].serve_start = i;
             curr[i].depot[i].serve_end = i;
