@@ -1,5 +1,6 @@
 #include <limits.h>
 #include <stdio.h>
+#include <stdlib.h>
 #include <string.h>
 
 enum {
@@ -12,10 +13,10 @@ struct Turtle {
     int carry;
 };
 
-int compare_turtle(void *x, void *y)
+int compare_turtle(const void *x, const void *y)
 {
-    struct Turtle *a = (struct Turtle *) x;
-    struct Turtle *b = (struct Turtle *) y;
+    const struct Turtle *a = (const struct Turtle *) x;
+    const struct Turtle *b = (const struct Turtle *) y;
 
     return a->carry - b->carry;
 }
