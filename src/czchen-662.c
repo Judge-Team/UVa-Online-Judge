@@ -174,7 +174,7 @@ int main(int argc, char *argv[])
                 }
             }
 
-            print_buf(curr, rest_count, n);
+            print_buf(curr, rest_count, n+1);
 
         }
 
