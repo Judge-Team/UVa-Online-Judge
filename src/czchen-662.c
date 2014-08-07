@@ -195,7 +195,7 @@ int main(int argc, char *argv[])
                 );
             }
         }
-        printf("Total distance sum = %d\n", curr[rest_count-1].cost);
+        printf("Total distance sum = %d\n\n", curr[rest_count-1].cost);
 
     }
 
