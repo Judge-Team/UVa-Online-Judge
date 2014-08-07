@@ -138,37 +138,38 @@ int main(int argc, char *argv[])
 
         print_buf(curr, rest_count, 1);
 
-        for (n = 2; n <= depot_count; ++n) {
+        for (n = 1; n < depot_count; ++n) {
             swap(&curr, &prev);
 
-            i = n - 1;
+            i = n;
 
             /*
              * When restaurant count = depot count.
              */
             curr[i] = prev[i-1];
+            /* curr[i].cost = 0 */
             curr[i].depot[i].loc = i;
             curr[i].depot[i].serve_start = i;
             curr[i].depot[i].serve_end = i;
 
             ++i;
             for (; i < rest_count; ++i) {
-                j = n - 1;
+                j = n;
 
                 curr[i] = prev[j];
                 curr[i].cost += cost_cache[j+1][i].cost;
-                curr[i].depot[n-1].loc = cost_cache[j+1][i].depot;
-                curr[i].depot[n-1].serve_start = j + 1;
-                curr[i].depot[n-1].serve_end = i;
+                curr[i].depot[n].loc = cost_cache[j+1][i].depot;
+                curr[i].depot[n].serve_start = j + 1;
+                curr[i].depot[n].serve_end = i;
 
                 ++j;
                 for (; j < i; ++j) {
                     if (prev[j].cost + cost_cache[j+1][i].cost < curr[i].cost) {
                         curr[i] = prev[j];
                         curr[i].cost += cost_cache[j+1][i].cost;
-                        curr[i].depot[n-1].loc = cost_cache[j+1][i].depot;
-                        curr[i].depot[n-1].serve_start = j + 1;
-                        curr[i].depot[n-1].serve_end = i;
+                        curr[i].depot[n].loc = cost_cache[j+1][i].depot;
+                        curr[i].depot[n].serve_start = j + 1;
+                        curr[i].depot[n].serve_end = i;
                     }
                 }
             }
