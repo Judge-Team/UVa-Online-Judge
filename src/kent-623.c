@@ -44,9 +44,9 @@ void Multiplication( struct Big_num *target , int num )
 
 int main()
 {
-	FILE *in , *out;
+	FILE *in ;
 	int num;
-	int i , j;
+	int i ;
 	int check;
 	in = stdin;/*fopen("623.in","r");*/
 
@@ -76,4 +76,6 @@ int main()
 		}
 		printf("\n");
 	}
+
+    return 0;
 }
