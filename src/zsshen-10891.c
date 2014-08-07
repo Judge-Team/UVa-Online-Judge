@@ -10,12 +10,11 @@
 
 int main() {
     int i, j, k, range, count, element, total, tmp_max, region_max;
-    int input[MAX_ELEMENT_COUNT + 1];
     int sum[MAX_ELEMENT_COUNT + 1][MAX_ELEMENT_COUNT + 1];
-    int dp[MAX_ELEMENT_COUNT + 1][MAX_ELEMENT_COUNT + 1]; 
+    int dp[MAX_ELEMENT_COUNT + 1][MAX_ELEMENT_COUNT + 1];
 
     while (true) {
-        
+
         scanf("%d", &count);
         if (count == 0)
             break;
@@ -34,7 +33,7 @@ int main() {
             }
             dp[i][i] = element;
         }
-       
+
         /**
          * Recursive formula:
          * dp[i][j]  : The optimal differencing score a player can tack at range from i to j.
@@ -42,11 +41,11 @@ int main() {
          *
          * dp[i][j] = Max{Max{(sum[i][k] - dp[k + 1][j]), (sum[k + 1][j] - dp[i][k]) | i<=k<j }, sum[i][j]}
          */
-        
+
         /* Main algorithm. */
         for (range = 1 ; range < count ; range++) {
             for (i = 1, j = i + range ; i <= count - range ; i++, j++) {
-                region_max = MIN_INT;                
+                region_max = MIN_INT;
                 for (k = i ; k <= j ; k++) {
                     if (k < j)
                         tmp_max = Max(sum[i][k] - dp[k + 1][j], sum[k + 1][j] - dp[i][k]);
@@ -58,7 +57,7 @@ int main() {
                 }
                 dp[i][j] = region_max;
             }
-        } 
+        }
 
         printf("%d\n", dp[1][count]);
 
