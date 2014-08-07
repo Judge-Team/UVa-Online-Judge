@@ -14,7 +14,7 @@ typedef struct _Turtle {
 
 
 int compare(const void *p_src, const void *p_tge) {
-    
+
     if (((Turtle*)p_src)->m_power == ((Turtle*)p_tge)->m_power)
         return 0;
     else {
@@ -28,17 +28,17 @@ int compare(const void *p_src, const void *p_tge) {
 
 int main() {
     int i, j, idx, weight, power;
-    int length, new_load;
+    int length;
     int load[MAX_OBJECT];
     Turtle turtle[MAX_OBJECT];
-    
+
     idx = 1;
     while(scanf("%d%d", &weight, &power) != EOF) {
         turtle[idx].m_weight = weight;
         turtle[idx].m_strength = power - weight;
         turtle[idx].m_power = power;
         idx++;
-    }  
+    }
     idx--;
 
     /* Sort the turtles by their original strength. */
@@ -52,15 +52,15 @@ int main() {
      *             len++;
      *             dp[len] = dp[len - 1] + w[i].
      *
-     *      2. And then maintain the optimal substructure.          
-     *             dp[j] = Min{dp[j], dp[j-1] + w[i]}, for 1 <= j <= len.  
+     *      2. And then maintain the optimal substructure.
+     *             dp[j] = Min{dp[j], dp[j-1] + w[i]}, for 1 <= j <= len.
      *
      */
 
-    /* Initial step. */    
+    /* Initial step. */
     load[0] = 0;
     load[1] = turtle[1].m_weight;
-    length = 1;    
+    length = 1;
 
     /* Deduction step. */
     for (i = 2 ; i <= idx ; i++) {
@@ -72,7 +72,7 @@ int main() {
                 } else {
                     load[j + 1] = Min(load[j + 1], load[j] + turtle[i].m_weight);
                 }
-            }            
+            }
         }
     }
 
