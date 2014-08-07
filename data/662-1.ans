@@ -15,14 +15,13 @@ Total distance sum = 10000
 Chain 4
 Depot 1 at restaurant 1 serves restaurant 1
 Depot 2 at restaurant 2 serves restaurant 2
-Depot 3 at restaurant 3 serves restaurants 3 to 4
-Total distance sum = 1
-
-Chain 5
-Depot 1 at restaurant 1 serves restaurant 1
-Depot 2 at restaurant 2 serves restaurant 2
 Depot 3 at restaurant 3 serves restaurant 3
 Total distance sum = 0
+
+Chain 5
+Depot 1 at restaurant 1 serves restaurants 1 to 2
+Depot 2 at restaurant 4 serves restaurants 3 to 5
+Total distance sum = 3
 
 Chain 6
 Depot 1 at restaurant 1 serves restaurants 1 to 2
@@ -30,11 +29,6 @@ Depot 2 at restaurant 4 serves restaurants 3 to 5
 Total distance sum = 3
 
 Chain 7
-Depot 1 at restaurant 1 serves restaurants 1 to 2
-Depot 2 at restaurant 4 serves restaurants 3 to 5
-Total distance sum = 3
-
-Chain 8
 Depot 1 at restaurant 3 serves restaurants 1 to 5
 Total distance sum = 6
 
