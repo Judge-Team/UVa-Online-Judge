@@ -100,7 +100,7 @@ int main(int argc, char *argv[])
     struct DepotLocation *curr = buf1;
     struct DepotLocation *prev = buf2;
 
-    for (iter = 0; scanf("%d%d", &rest_count, &depot_count) == 2; ++iter) {
+    for (iter = 1; scanf("%d%d", &rest_count, &depot_count) == 2; ++iter) {
         if (rest_count == 0 && depot_count == 0) {
             break;
         }
@@ -179,7 +179,7 @@ int main(int argc, char *argv[])
 
         }
 
-        printf("Chain %d\n", iter+1);
+        printf("Chain %d\n", iter);
         for (i = 0; i < depot_count; ++i) {
             if (curr[rest_count-1].depot[i].serve_start == curr[rest_count-1].depot[i].serve_end) {
                 printf("Depot %d at restaurant %d serves restaurant %d\n",
