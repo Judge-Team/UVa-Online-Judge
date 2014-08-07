@@ -43,9 +43,8 @@ int find_next_skyline_in_research(struct Data *data)
     return new_current_skyline;
 }
 
-int handle_skyline_end_with_next(struct Data *data)
+void handle_skyline_end_with_next(struct Data *data)
 {
-    int i;
     int new_current_skyline = -1;
 
     new_current_skyline = find_next_skyline_in_research(data);
