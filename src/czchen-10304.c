@@ -17,7 +17,6 @@ int main(int argc, char *argv[])
     int tree[MAX_NODE][MAX_NODE];
     int cost[MAX_NODE+1];
     int i;
-    int j;
     int start;
     int size;
     int split;
