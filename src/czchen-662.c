@@ -146,8 +146,8 @@ int main(int argc, char *argv[])
             /*
              * When restaurant count = depot count.
              */
-            curr[i].cost = 0;
-            curr[i].depot[i].loc = n;
+            curr[i] = prev[i-1];
+            curr[i].depot[i].loc = i;
             curr[i].depot[i].serve_start = i;
             curr[i].depot[i].serve_end = i;
 
