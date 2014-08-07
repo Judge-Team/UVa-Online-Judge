@@ -131,7 +131,7 @@ void add_trace_data( int round )
 	int i;
 	int hash;
 	struct CARD *P[7] , *D;
-	struct Trace *T_ptr , *create;
+	struct Trace *create;
 
 
 	for ( i = 0 ; i < 7 ; i++ ){
@@ -149,7 +149,6 @@ void add_trace_data( int round )
 		create->Pile[i] = P[i];
 	create->next = NULL;
 	create->end = NULL;
-	T_ptr = trace[hash];
 	if ( trace[hash] == NULL ){
 		trace[hash] = create;
 		trace[hash]->end = create;
@@ -161,8 +160,7 @@ void add_trace_data( int round )
 
 void free_trace_data()
 {
-	struct Trace *tmp , *T_ptr;
-	int k;
+	struct Trace *T_ptr;
 	int i,j;
 	for ( i = 0 ; i < 999999 ; i++ ){
 		if ( trace[i] == NULL )
@@ -197,12 +195,10 @@ int check_over()
 
 int main()
 {
-	int i , j , k;
+	int i , j ;
 	int first , second , last , last_2 , last_3 ;
 	int tmp;
-	int counter;
 	int round;
-	int check_num;
 	FILE *in;
 	in = stdin;//fopen("246.in","r");
 
@@ -247,7 +243,6 @@ int main()
 			dealt_card_to_top( &(pile[i%7]) , &deck );
 		}
 		round = 14;
-		check_num = 16;
 
 		while ( !check_over() ){
 			for ( i = 0 ; i < 7 && !check_over() ; i++ ){
