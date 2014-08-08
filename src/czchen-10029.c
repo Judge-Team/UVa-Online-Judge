@@ -1,0 +1,176 @@
+#include <stdio.h>
+#include <stdlib.h>
+#include <string.h>
+
+enum {
+    WORD_SIZE = 16,
+    DICT_SIZE = 25000,
+    ALPHABET_SIZE = 26,
+};
+
+struct TrieNode {
+    int exist;
+    struct TrieNode *children[ALPHABET_SIZE];
+};
+
+struct EditStep {
+    int step;
+    struct TrieNode trie;
+};
+
+static int char_to_index(char x)
+{
+    return x - 'a';
+}
+
+static void insert_trie(struct TrieNode *trie, const char *str)
+{
+#if DEBUG
+    printf("[trie] %s\n", str);
+#endif
+
+    while (*str) {
+        if (trie->children[char_to_index(*str)] == NULL) {
+            trie->children[char_to_index(*str)] = malloc(sizeof(*trie->children[0]));
+
+            if (trie->children[char_to_index(*str)] ==NULL) {
+                exit(-1);
+            }
+
+            memset(trie->children[char_to_index(*str)], 0, sizeof(*trie->children[0]));
+        }
+        trie = trie->children[char_to_index(*str)];
+        ++str;
+    }
+    trie->exist = 1;
+}
+
+static void create_trie(struct TrieNode *trie, const char *str)
+{
+    int c;
+    int pos;
+    char word[WORD_SIZE+1+1];
+    int len;
+
+    len = strlen(str);
+
+#if DEBUG
+    printf("[trie] insert all string which has one edit step from %s\n", str);
+#endif
+
+    /* insert */
+    for (pos = 0; pos <= len; ++pos) {
+        memcpy(word, str, pos);
+        memcpy(word+pos+1, str+pos, len-pos);
+        word[len+1] = 0;
+
+        for (c = 'a'; c <= 'z'; ++c) {
+            word[pos] = c;
+            insert_trie(trie, word);
+        }
+    }
+
+    /* delete */
+    for (pos = 0; pos < len; ++pos) {
+        memcpy(word, str, pos);
+        memcpy(word+pos, str+pos+1, len-pos-1);
+        word[len-1] = 0;
+        insert_trie(trie, word);
+    }
+
+    /* change */
+    for (pos = 0; pos < len; ++pos) {
+        strcpy(word, str);
+        for (c = 'a'; c <= 'z'; ++c) {
+            word[pos] = c;
+            insert_trie(trie, word);
+        }
+    }
+}
+
+static int is_in_trie(const struct TrieNode *trie, const char *str)
+{
+    struct TrieNode *next;
+
+    while (*str) {
+        next = trie->children[char_to_index(*str)];
+        if (next == NULL) {
+            return 0;
+        }
+        trie = next;
+        str++;
+    }
+
+    return trie->exist;
+}
+
+static int max(int x, int y)
+{
+    return x > y ? x : y;
+}
+
+static void remove_tailing_newline(char *str)
+{
+    int len;
+
+    len = strlen(str);
+
+    if (str[len-1] == '\n') {
+        str[len-1] = 0;
+    }
+}
+
+int main()
+{
+    char prev_word[WORD_SIZE+1];
+    char word[WORD_SIZE+1];
+
+    struct EditStep edit_step[DICT_SIZE];
+    int edit_step_count;
+
+    int i;
+
+    int ans;
+
+    fgets(prev_word, sizeof(word), stdin);
+    remove_tailing_newline(prev_word);
+    edit_step_count = 0;
+    edit_step[edit_step_count].step = 1;
+    ans = 1;
+
+    while (fgets(word, sizeof(word), stdin)) {
+        /*
+         * step[i] = maximum the longest edit step end in i
+         *
+         * step[i] = max | step[j] + 1 if j -> i is one edit step.
+         *               | 1
+         */
+
+        remove_tailing_newline(word);
+#if DEBUG
+        printf("[edit step] start processing %s\n", word);
+#endif
+        create_trie(&edit_step[edit_step_count].trie, prev_word);
+        ++edit_step_count;
+
+        edit_step[edit_step_count].step = 1;
+        for (i = 0; i < edit_step_count; ++i) {
+            if (is_in_trie(&edit_step[i].trie, word)) {
+                edit_step[edit_step_count].step = max(
+                    edit_step[edit_step_count].step,
+                    edit_step[i].step+1);
+#if DEBUG
+                printf("[edit step] Found %s in trie %d, step[%d] = %d\n",word, i, i, edit_step[i].step);
+                printf("[edit step] Set step[%d] = %d\n", edit_step_count, edit_step[edit_step_count].step);
+#endif
+                ans = max(ans, edit_step[edit_step_count].step);
+            }
+        }
+
+        strcpy(prev_word, word);
+    }
+
+    printf("%d\n", ans);
+
+    return 0;
+}
