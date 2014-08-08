@@ -106,10 +106,10 @@ int main(int argc, char *argv[])
         }
 
         /*
-         * cost(0, i, n) = best shipping cost when using n deopts for restaurant
-         *                 0 ~ i (inclusively)
+         * cost(i, j, n) = best shipping cost when using n deopts for restaurant
+         *                 i ~ j (inclusively)
          *
-         * cost(0, i, n) = max { cost(0, j, n-1) + cost(j+1, i, 1) }
+         * cost(0, i, n) = min { cost(0, j, n-1) + cost(j+1, i, 1) }
          *
          * cost(i, j, 1) can be calculated by setting depot to (i + j) / 2.
          */
