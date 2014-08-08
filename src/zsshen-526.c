@@ -22,11 +22,13 @@ typedef struct _Operation {
 
 int main() {
     int i, j, len_src, len_tge, min, distance;
-    char direct;
+    /* char direct; */
     char str_src[MAX_STR_LENGTH], str_tge[MAX_STR_LENGTH];
     int  dp[MAX_STR_LENGTH][MAX_STR_LENGTH];
+    /*
     char map_direct[MAX_STR_LENGTH][MAX_STR_LENGTH];
     Operation list_ops[MAX_STR_LENGTH];
+    */
 
     do {
         memset(str_src, 0, sizeof(char) * MAX_STR_LENGTH);
@@ -45,7 +47,7 @@ int main() {
             for (j = 1 ; j <= len_tge ; j++) {
                 if (str_src[i] == str_tge[j]) {
                     dp[i][j] = dp[i - 1][j - 1];
-                    map_direct[i][j] = DIRECT_UP_LEFT;                
+                    /* map_direct[i][j] = DIRECT_UP_LEFT; */
                 }
                 else {
                     min = INT_MAX;
@@ -53,23 +55,23 @@ int main() {
                     distance = dp[i][j - 1] + 1;
                     if (distance < min) {
                         min = distance;
-                        direct = DIRECT_UP;                    
-                    }    
+                        /* direct = DIRECT_UP; */
+                    }
 
                     distance = dp[i - 1][j] + 1;
                     if (distance < min) {
                         min = distance;
-                        direct = DIRECT_LEFT;                    
+                        /* direct = DIRECT_LEFT; */
                     }
 
                     distance = dp[i - 1][j - 1] + 1;
                     if (distance < min) {
                         min = distance;
-                        direct = DIRECT_UP_LEFT;                    
+                        /* direct = DIRECT_UP_LEFT; */
                     }
 
                     dp[i][j] = min;
-                    map_direct[i][j] = direct;
+                    /* map_direct[i][j] = direct; */
                 }
             }
         }
@@ -77,8 +79,8 @@ int main() {
         /*
         for (i = 1 ; i <= len_src ; i++) {
             for (j = 1 ; j <= len_tge ; j++)
-                printf("%3d ", dp[i][j]);     
-            printf("\n");   
+                printf("%3d ", dp[i][j]);
+            printf("\n");
         }
         printf("\n");
         for (i = 1 ; i <= len_src ; i++) {
@@ -90,9 +92,9 @@ int main() {
                 else if (map_direct[i][j] == DIRECT_UP_LEFT)
                     printf("%3c ", '\\');
             }
-            printf("\n");   
+            printf("\n");
         }
-        printf("\n");    
+        printf("\n");
         */
 
         printf("%d\n", dp[len_src][len_tge]);
