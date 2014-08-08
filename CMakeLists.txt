@@ -25,8 +25,8 @@ enable_testing()
 add_custom_target(check COMMAND ${CMAKE_CTEST_COMMAND})
 
 set(SKIP_CASES
-    czchen-104
-    zsshen-104
+    czchen-104 # multiple answers
+    zsshen-104 # multiple answers
     zsshen-526
 )
 
