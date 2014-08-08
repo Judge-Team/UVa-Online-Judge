@@ -17,7 +17,7 @@ int main() {
     char word[16];
     int n = 0;
     int i, j, ret = 0;
-    while(gets(word)) {
+    while(fgets(word, sizeof(word), stdin)) {
         int len = strlen(word);
         int mx = 0;
         string x = word;
@@ -62,4 +62,4 @@ int main() {
     }
     printf("%d\n", ret);
     return 0;
-}/
+}
