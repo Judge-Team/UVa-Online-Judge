@@ -3,12 +3,12 @@ project(UVa-Online-Judge)
 
 if(${CMAKE_C_COMPILER_ID} STREQUAL "GNU" OR
     ${CMAKE_C_COMPILER_ID} STREQUAL "Clang")
-        set(CMAKE_C_FLAGS "-lm -lcrypt -O2 -pipe -ansi -DONLINE_JUDGE ${CMAKE_C_FLAGS}")
+    set(CMAKE_C_FLAGS "-lm -lcrypt -O2 -pipe -ansi -DONLINE_JUDGE -Wall -Werror ${CMAKE_C_FLAGS}")
 endif()
 
 if(${CMAKE_CXX_COMPILER_ID} STREQUAL "GNU" OR
     ${CMAKE_CXX_COMPILER_ID} STREQUAL "Clang")
-        set(CMAKE_CXX_FLAGS "-lm -lcrypt -O2 -pipe -DONLINE_JUDGE ${CMAKE_CXX_FLAGS}")
+    set(CMAKE_CXX_FLAGS "-lm -lcrypt -O2 -pipe -DONLINE_JUDGE -Wall -Werror ${CMAKE_CXX_FLAGS}")
 endif()
 
 configure_file(

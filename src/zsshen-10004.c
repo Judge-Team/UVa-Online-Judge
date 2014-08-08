@@ -48,14 +48,14 @@ void graph_traversal(Graph*);
 
 
 int main() {
-    int i, count_node;
-    Graph *graph;	
+    int count_node;
+    Graph *graph;
 
     while(true) {
         scanf("%d", &count_node);
         if (count_node == 0)
             break;
-        
+
         graph_init(&graph, count_node);
         graph_traversal(graph);
         graph_deinit(graph);
@@ -74,22 +74,22 @@ void graph_init(Graph **p_graph, int count_node) {
     *p_graph = (Graph*)malloc(sizeof(Graph));
     graph = *p_graph;
     graph->count_node = count_node;
-    graph->adj_head = (AdjacencyRecord**)malloc(sizeof(AdjacencyRecord*) * count_node);    
+    graph->adj_head = (AdjacencyRecord**)malloc(sizeof(AdjacencyRecord*) * count_node);
     graph->adj_tail = (AdjacencyRecord**)malloc(sizeof(AdjacencyRecord*) * count_node);
-    graph->node = (GraphNode*)malloc(sizeof(GraphNode) * count_node);        
+    graph->node = (GraphNode*)malloc(sizeof(GraphNode) * count_node);
     for (i = 0 ; i < count_node ; i++) {
         graph->adj_head[i] = NULL;
         graph->adj_tail[i] = NULL;
         (graph->node[i]).color = COLOR_NONE;
         (graph->node[i]).visit = STATE_UNVISITED;
-    }    
+    }
 
     scanf("%d", &count_edge);
 
     /* Construct the Adjacency list. */
     for (i = 0 ; i < count_edge ; i++) {
         scanf("%d%d", &node_src, &node_tge);
-                    
+
         /* The graph must be undirected. */
         record_tge = (AdjacencyRecord*)malloc(sizeof(AdjacencyRecord));
         record_tge->idx_neighbor = node_tge;
@@ -123,7 +123,7 @@ void graph_init(Graph **p_graph, int count_node) {
 void graph_deinit(Graph *graph) {
     int i;
     AdjacencyRecord *curr, *pred;
-    
+
     for (i = 0 ; i < graph->count_node ; i++) {
         curr = graph->adj_head[i];
         while (curr != NULL) {
@@ -132,10 +132,10 @@ void graph_deinit(Graph *graph) {
             free(pred);
         }
     }
-    
+
     free(graph->adj_head);
     free(graph->adj_tail);
-    free(graph->node); 
+    free(graph->node);
     free(graph);
 
     return;
@@ -144,7 +144,7 @@ void graph_deinit(Graph *graph) {
 
 void graph_show(Graph *graph) {
     int i;
-    AdjacencyRecord *curr;    
+    AdjacencyRecord *curr;
 
     /* Show the adjacency list. */
     for (i = 0 ; i < graph->count_node ; i++) {
@@ -153,11 +153,11 @@ void graph_show(Graph *graph) {
         while (curr != NULL) {
             printf("%2d ", curr->idx_neighbor);
             curr = curr->next;
-        }        
+        }
         printf("\n");
     }
     printf("\n");
-        
+
     return;
 }
 
@@ -165,12 +165,12 @@ void graph_show(Graph *graph) {
 void graph_traversal(Graph *graph) {
     bool found_err;
     char color_src, color_tge;
-    int  front, rear, node_src, node_tge;    
+    int  front, rear, node_src, node_tge;
     AdjacencyRecord *curr;
     int queue[MAX_NODE_COUNT];
 
     found_err = false;
-    
+
     /* Initialize the queue. */
     front = 0;
     rear = 1;
@@ -183,24 +183,24 @@ void graph_traversal(Graph *graph) {
         node_src = queue[front++];
         (graph->node[node_src]).visit = STATE_VISITED;
         color_src = (graph->node[node_src]).color;
-	
+
         curr = graph->adj_head[node_src];
         while (curr != NULL) {
             node_tge = curr->idx_neighbor;
-        
+
             if ((graph->node[node_tge]).visit == STATE_UNVISITED) {
                 (graph->node[node_tge]).visit = STATE_VISITING;
                 queue[rear++] = node_tge;
             }
 
-            /* Check for the color confliction. */    
+            /* Check for the color confliction. */
             if ((graph->node[node_tge]).color == COLOR_NONE)
                 (graph->node[node_tge]).color = -color_src;
             else {
                 color_tge = (graph->node[node_tge]).color;
                 if (-color_src != color_tge) {
                     found_err = true;
-                    break;                    
+                    break;
                 }
             }
             curr = curr->next;

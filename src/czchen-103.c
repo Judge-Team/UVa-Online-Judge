@@ -1,4 +1,5 @@
 #include <stdio.h>
+#include <stdlib.h>
 #include <string.h>
 
 enum {
@@ -14,10 +15,10 @@ struct Box {
     int size;
 };
 
-int compare_dim(void *x, void *y)
+int compare_dim(const void *x, const void *y)
 {
-    int *a = (int *) x;
-    int *b = (int *) y;
+    const int *a = (const int *) x;
+    const int *b = (const int *) y;
 
     return *b - *a;
 }
@@ -27,11 +28,11 @@ void sort_dim(struct Box *box)
     qsort(box->dim, MAX_DIM, sizeof(box->dim[0]), compare_dim);
 }
 
-int compare_size(void *x, void *y)
+int compare_size(const void *x, const void *y)
 {
     int i;
-    struct Box *a = (struct Box *) x;
-    struct Box *b = (struct Box *) y;
+    const struct Box *a = (const struct Box *) x;
+    const struct Box *b = (const struct Box *) y;
 
     for (i = 0; i < MAX_DIM; ++i) {
         if (a->dim[i] != b->dim[i]) {
@@ -42,10 +43,10 @@ int compare_size(void *x, void *y)
     return 0;
 }
 
-int compare_id(void *x, void *y)
+int compare_id(const void *x, const void *y)
 {
-    struct Box *a = (struct Box *) x;
-    struct Box *b = (struct Box *) y;
+    const struct Box *a = (const struct Box *) x;
+    const struct Box *b = (const struct Box *) y;
 
     return a->id - b->id;
 }

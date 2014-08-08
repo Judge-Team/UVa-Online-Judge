@@ -23,7 +23,7 @@ void relax( int u , int v )
 
 int find_minimum_u()
 {
-	int i ,u;
+	int i ,u = 0;
 	int min = -1;
 	for ( i = 1 ; i <= node_num ; i++ ){
 		if ( S[i] != 1 ){
@@ -39,8 +39,8 @@ int find_minimum_u()
 int main()
 {
 	int counter;
-	int i , j , k , x , y , z;
-	int v , u;
+	int i , j , x ;
+	int v , u = 0;
 	int max_time;
 	int src , dst , cost;
 	double	finish_time;

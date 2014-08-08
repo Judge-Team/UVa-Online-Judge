@@ -8,7 +8,6 @@ int max(int x, int y)
 int main(int argc, char *argv[])
 {
     int count;
-    int i;
 
     while (scanf("%d", &count) == 1) {
         int i;

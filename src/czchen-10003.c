@@ -59,4 +59,5 @@ int main(int argc, char *argv[])
         printf("The minimum cutting is %d.\n", buf[0][cut_count + 1]);
     }
 
+    return 0;
 }
