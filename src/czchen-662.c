@@ -151,7 +151,7 @@ int main(int argc, char *argv[])
 
             ++i;
             for (; i < rest_count; ++i) {
-                j = n;
+                j = n - 1;
 
                 curr[i] = prev[j];
                 curr[i].cost += cost_cache[j+1][i].cost;
