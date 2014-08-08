@@ -59,7 +59,7 @@ static void find_best_depot(
     curr_depot = (start + end) / 2;
     curr_cost = 0;
 
-    for (i = start, curr_cost = 0; i <= end; ++i) {
+    for (i = start; i <= end; ++i) {
         curr_cost += abs(rest[curr_depot] - rest[i]);
     }
 
