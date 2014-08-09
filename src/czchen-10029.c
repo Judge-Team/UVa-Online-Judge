@@ -15,7 +15,7 @@ struct TrieNode {
 
 struct EditStep {
     int step;
-    struct TrieNode trie;
+    char word[WORD_SIZE+1];
 };
 
 static int char_to_index(char x)
@@ -45,12 +45,19 @@ static void insert_trie(struct TrieNode *trie, const char *str)
     trie->exist = 1;
 }
 
-static void create_trie(struct TrieNode *trie, const char *str)
+struct TrieNode *create_trie(const char *str)
 {
+    struct TrieNode *trie;
     int c;
     int pos;
     char word[WORD_SIZE+1+1];
     int len;
+
+    trie = malloc(sizeof(*trie));
+    if (trie == NULL) {
+        exit(-1);
+    }
+    memset(trie, 0, sizeof(*trie));
 
     len = strlen(str);
 
@@ -86,6 +93,20 @@ static void create_trie(struct TrieNode *trie, const char *str)
             insert_trie(trie, word);
         }
     }
+
+    return trie;
+}
+
+static void destroy_trie(struct TrieNode *trie)
+{
+    int i;
+
+    for (i = 0; i < ALPHABET_SIZE; ++i) {
+        if (trie->children[i] != NULL) {
+            destroy_trie(trie->children[i]);
+        }
+    }
+    free(trie);
 }
 
 static int is_in_trie(const struct TrieNode *trie, const char *str)
@@ -122,8 +143,7 @@ static void remove_tailing_newline(char *str)
 
 int main()
 {
-    char prev_word[WORD_SIZE+1];
-    char word[WORD_SIZE+1];
+    struct TrieNode *trie;
 
     struct EditStep edit_step[DICT_SIZE];
     int edit_step_count;
@@ -132,13 +152,15 @@ int main()
 
     int ans;
 
-    fgets(prev_word, sizeof(word), stdin);
-    remove_tailing_newline(prev_word);
     edit_step_count = 0;
+    fgets(edit_step[edit_step_count].word, sizeof(edit_step[0].word), stdin);
+    remove_tailing_newline(edit_step[edit_step_count].word);
     edit_step[edit_step_count].step = 1;
     ans = 1;
 
-    while (fgets(word, sizeof(word), stdin)) {
+    ++edit_step_count;
+
+    while (fgets(edit_step[edit_step_count].word, sizeof(edit_step[0].word), stdin)) {
         /*
          * step[i] = maximum the longest edit step end in i
          *
@@ -146,16 +168,17 @@ int main()
          *               | 1
          */
 
-        remove_tailing_newline(word);
-#if DEBUG
-        printf("[edit step] start processing %s\n", word);
-#endif
-        create_trie(&edit_step[edit_step_count].trie, prev_word);
-        ++edit_step_count;
-
+        remove_tailing_newline(edit_step[edit_step_count].word);
         edit_step[edit_step_count].step = 1;
+
+#if DEBUG
+        printf("[edit step] start processing %s\n", edit_step[edit_step_count].word);
+#endif
+
+        trie = create_trie(edit_step[edit_step_count].word);
+
         for (i = 0; i < edit_step_count; ++i) {
-            if (is_in_trie(&edit_step[i].trie, word)) {
+            if (is_in_trie(trie, edit_step[i].word)) {
                 edit_step[edit_step_count].step = max(
                     edit_step[edit_step_count].step,
                     edit_step[i].step+1);
@@ -167,7 +190,9 @@ int main()
             }
         }
 
-        strcpy(prev_word, word);
+        destroy_trie(trie);
+
+        ++edit_step_count;
     }
 
     printf("%d\n", ans);
