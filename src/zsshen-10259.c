@@ -17,7 +17,7 @@ void build_graph(Edge**, Edge**, short, short);
 
 
 int main() {
-    int i, j, k, idx, round, dim, hop, src, dst, sum, max;
+    int i, j, round, dim, hop, src, dst, sum, max;
     bool check;
     Edge *head, *tail;
     int input[MAX_DIMENSION * MAX_DIMENSION];
