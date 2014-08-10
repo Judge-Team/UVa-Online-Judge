@@ -15,6 +15,7 @@ struct TrieNode {
 
 struct EditStep {
     int step;
+    int word_len;
     char word[WORD_SIZE+1];
 };
 
@@ -141,6 +142,21 @@ static void remove_tailing_newline(char *str)
     }
 }
 
+static int load_word(struct EditStep *edit_step)
+{
+    char *ret;
+    ret = fgets(edit_step->word, sizeof(edit_step->word), stdin);
+    if (ret == NULL) {
+        return -1;
+    }
+
+    remove_tailing_newline(edit_step->word);
+    edit_step->word_len = strlen(edit_step->word);
+    edit_step->step = 1;
+
+    return 0;
+}
+
 int main()
 {
     struct TrieNode *trie;
@@ -153,23 +169,18 @@ int main()
     int ans;
 
     edit_step_count = 0;
-    fgets(edit_step[edit_step_count].word, sizeof(edit_step[0].word), stdin);
-    remove_tailing_newline(edit_step[edit_step_count].word);
-    edit_step[edit_step_count].step = 1;
+    load_word(&edit_step[edit_step_count]);
     ans = 1;
 
     ++edit_step_count;
 
-    while (fgets(edit_step[edit_step_count].word, sizeof(edit_step[0].word), stdin)) {
+    while (load_word(&edit_step[edit_step_count]) == 0) {
         /*
          * step[i] = maximum the longest edit step end in i
          *
          * step[i] = max | step[j] + 1 if j -> i is one edit step.
          *               | 1
          */
-
-        remove_tailing_newline(edit_step[edit_step_count].word);
-        edit_step[edit_step_count].step = 1;
 
 #if DEBUG
         printf("[edit step] start processing %s\n", edit_step[edit_step_count].word);
