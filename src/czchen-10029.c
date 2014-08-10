@@ -189,7 +189,8 @@ int main()
         trie = create_trie(edit_step[edit_step_count].word);
 
         for (i = 0; i < edit_step_count; ++i) {
-            if (is_in_trie(trie, edit_step[i].word)) {
+            if (abs(edit_step[i].word_len - edit_step[edit_step_count].word_len) <= 1 &&
+                is_in_trie(trie, edit_step[i].word)) {
                 edit_step[edit_step_count].step = max(
                     edit_step[edit_step_count].step,
                     edit_step[i].step+1);
