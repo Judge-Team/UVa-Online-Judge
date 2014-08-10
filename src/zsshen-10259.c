@@ -33,7 +33,11 @@ int main() {
         }
         dp[0] = input[0];
 
-        /* Construct the compressed directed graph. */
+        /** 
+         * For each vertex pair (src, dst), there will be a direct edge from "src" to "dst" if   
+         * the value stored in "dst" is larger than "src" and the distance between them is equal 
+         * or smaller than the designated hop counts.   
+         */                                         
         head = tail = NULL;
         for (i = 0 ; i < dim * dim ; i++) {
             src = i;
@@ -94,11 +98,17 @@ int main() {
                 dp[dst] = dp[0] + input[dst];
         }
 
-        /* Apply Bellman-Ford algorithm. */
+        /**
+         * Recursive formula (Applying modified Bellman-Ford algorithm) :
+         * 1. dp[v] : The maximum penny counts collected along the path from source vertex to vertex "v".
+         * 2. dp[dst] = MAX{dp[dst], dst[src] + input[dst]}. 
+         */
         max = dp[0];
         for (i = 2 ; i < dim * dim ; i++) {
             tail = head;
             check = false;
+
+            /* Path relaxation for each pair of edges. */
             while (tail != NULL) {
                 src = tail->src;
                 dst = tail->dst;
@@ -106,8 +116,6 @@ int main() {
     
                 if ((dp[src] == -1) && (dp[dst] == -1))
                     continue;
-    
-                /*printf("%d %d\n", src, dst);*/
     
                 sum = dp[src] + input[dst];
                 if (sum > dp[dst]) {
@@ -121,11 +129,6 @@ int main() {
 
             if (check == false)
                 break;
-            /*
-            for (j = 0 ; j < dim * dim ; j++)
-                printf("%3d ", dp[j]);
-            printf("\n");
-            */
         }
 
         printf("%d\n\n", max);
