@@ -180,6 +180,18 @@ int main()
          *
          * step[i] = max | step[j] + 1 if j -> i is one edit step.
          *               | 1
+         *
+         * To find a suitable j, we can use the balanced binary search tree. The
+         * balanced B.S.T uses { length, step } as key. The suitable j will be:
+         *
+         *     max step in | { strlen(i)-1, step }
+         *                 | { strlen(i),   step }
+         *                 | { strlen(i)+1, step }
+         *
+         * With balanced B.S.T, we can easily find all previous words with
+         * length = strlen(i)-1 ~ strlen(i)+1. And then we just need to find the
+         * item with maximum step.
+         *
          */
 
 #if DEBUG
