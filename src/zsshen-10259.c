@@ -131,15 +131,17 @@ int main() {
                 break;
         }
 
-        printf("%d\n\n", max);
-
         /* Destruct the graph. */
         while (head != NULL) {
             tail = head;
             head = head->next;
             free(tail);
         }
+
+        printf("%d\n", max);
         round--;
+        if (round > 0)
+            printf("\n");
     }
 
     return 0;
