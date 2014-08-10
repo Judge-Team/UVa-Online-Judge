@@ -8,7 +8,7 @@
 
 
 int main() {
-    int i, j, round, num_row, num_col, turn, idx_row, idx_col, sum;
+    int i, j, round, num_row, num_col, turn, idx_row, idx_col;
     char *token;
     char input[MAX_ROW_COL * MAX_ROW_COL];
     unsigned long long  dp[MAX_ROW_COL + 1][MAX_ROW_COL + 1];
