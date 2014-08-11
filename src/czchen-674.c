@@ -47,6 +47,7 @@ int main()
             }
         }
     }
+    value = COIN_TYPE[MAX_TYPES-1];
 
     while (scanf("%d", &coin) == 1) {
         if (value < coin) {
