@@ -12,7 +12,7 @@ int main()
     int coin;
     int ans[MAX_CENTS+1][MAX_TYPES];
     int value;
-    int orig_value;
+    int ans_bound;
     int type;
     int x;
 
@@ -47,23 +47,21 @@ int main()
             }
         }
     }
-    value = COIN_TYPE[MAX_TYPES-1];
+    ans_bound = COIN_TYPE[MAX_TYPES-1];
 
     while (scanf("%d", &coin) == 1) {
-        if (value < coin) {
-            orig_value = value;
-
-            for (; value <= coin; ++value) {
+        if (ans_bound < coin) {
+            for (value = ans_bound; value <= coin; ++value) {
                 ans[value][0] = 1;
             }
 
             for (type = 1; type < MAX_TYPES; ++type) {
-                for (value = orig_value; value <= coin; ++value) {
+                for (value = ans_bound; value <= coin; ++value) {
                     ans[value][type] = ans[value][type-1] + ans[value-COIN_TYPE[type]][type];
                 }
             }
 
-            value = coin;
+            ans_bound = coin;
         }
 
         printf("%d\n", ans[coin][MAX_TYPES-1]);
