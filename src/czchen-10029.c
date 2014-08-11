@@ -19,113 +19,6 @@ struct EditStep {
     char word[WORD_SIZE+1];
 };
 
-static int char_to_index(char x)
-{
-    return x - 'a';
-}
-
-static void insert_trie(struct TrieNode *trie, const char *str)
-{
-#if DEBUG
-    printf("[trie] %s\n", str);
-#endif
-
-    while (*str) {
-        if (trie->children[char_to_index(*str)] == NULL) {
-            trie->children[char_to_index(*str)] = malloc(sizeof(*trie->children[0]));
-
-            if (trie->children[char_to_index(*str)] ==NULL) {
-                exit(-1);
-            }
-
-            memset(trie->children[char_to_index(*str)], 0, sizeof(*trie->children[0]));
-        }
-        trie = trie->children[char_to_index(*str)];
-        ++str;
-    }
-    trie->exist = 1;
-}
-
-struct TrieNode *create_trie(const char *str)
-{
-    struct TrieNode *trie;
-    int c;
-    int pos;
-    char word[WORD_SIZE+1+1];
-    int len;
-
-    trie = malloc(sizeof(*trie));
-    if (trie == NULL) {
-        exit(-1);
-    }
-    memset(trie, 0, sizeof(*trie));
-
-    len = strlen(str);
-
-#if DEBUG
-    printf("[trie] insert all string which has one edit step from %s\n", str);
-#endif
-
-    /* insert */
-    for (pos = 0; pos <= len; ++pos) {
-        memcpy(word, str, pos);
-        memcpy(word+pos+1, str+pos, len-pos);
-        word[len+1] = 0;
-
-        for (c = 'a'; c <= 'z'; ++c) {
-            word[pos] = c;
-            insert_trie(trie, word);
-        }
-    }
-
-    /* delete */
-    for (pos = 0; pos < len; ++pos) {
-        memcpy(word, str, pos);
-        memcpy(word+pos, str+pos+1, len-pos-1);
-        word[len-1] = 0;
-        insert_trie(trie, word);
-    }
-
-    /* change */
-    for (pos = 0; pos < len; ++pos) {
-        strcpy(word, str);
-        for (c = 'a'; c <= 'z'; ++c) {
-            word[pos] = c;
-            insert_trie(trie, word);
-        }
-    }
-
-    return trie;
-}
-
-static void destroy_trie(struct TrieNode *trie)
-{
-    int i;
-
-    for (i = 0; i < ALPHABET_SIZE; ++i) {
-        if (trie->children[i] != NULL) {
-            destroy_trie(trie->children[i]);
-        }
-    }
-    free(trie);
-}
-
-static int is_in_trie(const struct TrieNode *trie, const char *str)
-{
-    struct TrieNode *next;
-
-    while (*str) {
-        next = trie->children[char_to_index(*str)];
-        if (next == NULL) {
-            return 0;
-        }
-        trie = next;
-        str++;
-    }
-
-    return trie->exist;
-}
-
 static int max(int x, int y)
 {
     return x > y ? x : y;
@@ -157,10 +50,64 @@ static int load_word(struct EditStep *edit_step)
     return 0;
 }
 
+static void swap(struct EditStep **x, struct EditStep **y)
+{
+    struct EditStep *tmp;
+
+    tmp = *x;
+    *x = *y;
+    *y = tmp;
+}
+
+static int is_one_step(struct EditStep *x, struct EditStep *y)
+{
+    char *ptr_x;
+    char *ptr_y;
+    int step;
+
+    if (abs(x->word_len - y->word_len) > 1) {
+        return 0;
+    }
+
+    if (x->word_len < y->word_len) {
+        swap(&x, &y);
+    }
+
+    step = 0;
+    ptr_x = x->word;
+    ptr_y = y->word;
+
+    if (x->word_len == y->word_len) {
+        while (*ptr_x) {
+            if (*ptr_x != *ptr_y) {
+                ++step;
+                if (step > 1) {
+                    return 0;
+                }
+            }
+            ++ptr_x;
+            ++ptr_y;
+        }
+    } else {
+        /* x->word_len > y->word_len */
+        while (*ptr_y) {
+            if (*ptr_x != *ptr_y) {
+                ++step;
+                if (step > 1) {
+                    return 0;
+                }
+                --ptr_x;
+            }
+            ++ptr_x;
+            ++ptr_y;
+        }
+    }
+
+    return 1;
+}
+
 int main()
 {
-    struct TrieNode *trie;
-
     struct EditStep edit_step[DICT_SIZE];
     int edit_step_count;
 
@@ -198,11 +145,8 @@ int main()
         printf("[edit step] start processing %s\n", edit_step[edit_step_count].word);
 #endif
 
-        trie = create_trie(edit_step[edit_step_count].word);
-
         for (i = 0; i < edit_step_count; ++i) {
-            if (abs(edit_step[i].word_len - edit_step[edit_step_count].word_len) <= 1 &&
-                is_in_trie(trie, edit_step[i].word)) {
+            if (is_one_step(&edit_step[i], &edit_step[edit_step_count])) {
                 edit_step[edit_step_count].step = max(
                     edit_step[edit_step_count].step,
                     edit_step[i].step+1);
@@ -213,8 +157,6 @@ int main()
                 ans = max(ans, edit_step[edit_step_count].step);
             }
         }
-
-        destroy_trie(trie);
 
         ++edit_step_count;
     }
