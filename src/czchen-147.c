@@ -11,7 +11,7 @@ enum {
 /*
  * Too big for auto variable;
  */
-unsigned long long ans[MAX_CENTS / ADJUST][MAX_TYPES];
+unsigned long long ans[MAX_CENTS / ADJUST + 1][MAX_TYPES];
 
 int main()
 {
