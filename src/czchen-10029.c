@@ -5,12 +5,6 @@
 enum {
     WORD_SIZE = 16,
     DICT_SIZE = 25000,
-    ALPHABET_SIZE = 26,
-};
-
-struct TrieNode {
-    int exist;
-    struct TrieNode *children[ALPHABET_SIZE];
 };
 
 struct EditStep {
