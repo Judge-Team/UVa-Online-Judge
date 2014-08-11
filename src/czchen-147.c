@@ -59,6 +59,7 @@ int main()
             }
         }
     }
+    value = adj_coin_type[MAX_TYPES-1];
 
     while (scanf("%d.%d", &dollar, &cent) == 2) {
         coin = (dollar * 100 + cent) / ADJUST;
