@@ -8,17 +8,13 @@ enum {
     ADJUST    = 5,
 };
 
-/*
- * Too big for auto variable;
- */
-unsigned long long ans[MAX_CENTS / ADJUST + 1][MAX_TYPES];
-
 int main()
 {
     int dollar;
     int cent;
     int coin;
     int adj_coin_type[MAX_TYPES];
+    unsigned long long ans[MAX_CENTS / ADJUST + 1][MAX_TYPES];
     int value;
     int orig_value;
     int type;
