@@ -61,9 +61,6 @@ int main()
     }
 
     while (scanf("%d.%d", &dollar, &cent) == 2) {
-        if (cent < 10) {
-            cent *= 10;
-        }
         coin = (dollar * 100 + cent) / ADJUST;
 
         if (coin == 0) {
