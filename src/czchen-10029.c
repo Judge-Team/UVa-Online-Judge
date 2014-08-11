@@ -96,7 +96,7 @@ static int is_one_step(struct EditStep *x, struct EditStep *y)
                 if (step > 1) {
                     return 0;
                 }
-                --ptr_x;
+                --ptr_y;
             }
             ++ptr_x;
             ++ptr_y;
