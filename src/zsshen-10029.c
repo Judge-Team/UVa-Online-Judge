@@ -127,6 +127,20 @@ int main() {
     
     printf("%d\n", global_max);
 
+    /*
+    for (i = 1 ; i < MAX_WORD_LENGTH ; i++) {
+        if (book[i] != NULL) {
+            printf("%3d -> ", i);
+            curr = book[i];
+            while (curr != NULL) {
+                printf("(%s, %d) ", curr->str + 1, curr->step);
+                curr = curr->next;
+            }
+            printf("\n");
+        }
+    }
+    */
+
     for (i = 1 ; i < MAX_WORD_LENGTH ; i++) {
         if (book[i] != NULL) {
             curr = book[i];
@@ -142,7 +156,7 @@ int main() {
     return 0;
 }
 
-
+/*
 bool check_edit_step_diff_length(const char *str_src, int len_src, const char *str_dst, int len_dst) {
     int i, j, min, sum;
     int edit[MAX_WORD_LENGTH][MAX_WORD_LENGTH];    
@@ -176,6 +190,40 @@ bool check_edit_step_diff_length(const char *str_src, int len_src, const char *s
         return true;
     else
         return false;
+}
+*/
+
+bool check_edit_step_diff_length(const char *str_src, int len_src, const char *str_dst, int len_dst) {
+    int i, j, len_short, len_long, count;
+    const char *str_short, *str_long;
+    
+    if (len_src > len_dst) {
+        len_long = len_src;
+        str_long = str_src;
+        len_short = len_dst;
+        str_short = str_dst;
+    } else {
+        len_long = len_dst;
+        str_long = str_dst;
+        len_short = len_src;
+        str_short = str_src;        
+    }
+
+    count = 0;
+    for (i = 1, j = 1 ; (i <= len_long) && (j <= len_short); ) {
+        if (str_long[i] == str_short[j]) {
+            i++;        
+            j++;
+        }
+        else {
+            i++;
+            count++;
+            if (count > 1)
+                return false;
+        }
+    }
+
+    return true;
 }
 
 
