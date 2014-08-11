@@ -16,7 +16,7 @@ int main()
     int adj_coin_type[MAX_TYPES];
     unsigned long long ans[MAX_CENTS / ADJUST + 1][MAX_TYPES];
     int value;
-    int orig_value;
+    int ans_bound;
     int type;
     int x;
 
@@ -59,7 +59,7 @@ int main()
             }
         }
     }
-    value = adj_coin_type[MAX_TYPES-1];
+    ans_bound = adj_coin_type[MAX_TYPES-1];
 
     while (scanf("%d.%d", &dollar, &cent) == 2) {
         coin = (dollar * 100 + cent) / ADJUST;
@@ -68,20 +68,19 @@ int main()
             break;
         }
 
-        if (value < coin) {
-            orig_value = value;
+        if (ans_bound < coin) {
 
-            for (; value <= coin; ++value) {
+            for (value = ans_bound; value <= coin; ++value) {
                 ans[value][0] = 1;
             }
 
             for (type = 1; type < MAX_TYPES; ++type) {
-                for (value = orig_value; value <= coin; ++value) {
+                for (value = ans_bound; value <= coin; ++value) {
                     ans[value][type] = ans[value][type-1] + ans[value-adj_coin_type[type]][type];
                 }
             }
 
-            value = coin;
+            ans_bound = coin;
         }
 
         printf("%3d.%02d%17llu\n", dollar, cent, ans[coin][MAX_TYPES-1]);
