@@ -16,7 +16,7 @@ struct TrieNode {
 struct EditStep {
     int step;
     int word_len;
-    char word[WORD_SIZE+1];
+    char word[WORD_SIZE+2];
 };
 
 static int max(int x, int y)
