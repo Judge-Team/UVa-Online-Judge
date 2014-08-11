@@ -1,4 +1,5 @@
 #!/usr/bin/env python3
+import argparse
 import filecmp
 import glob
 import os
@@ -29,14 +30,16 @@ def run_test(prog, input):
     return res
 
 def main():
-    if len(sys.argv) != 2:
-        return -1
+    parser = argparse.ArgumentParser(description='Test runner')
+    parser.add_argument('case', nargs=1, help='Test case')
+    parser.add_argument('--skip', action='store_true', help='Do not report error')
+    args = parser.parse_args()
 
     pass_ = True
 
-    prog = os.path.join(BIN, 'bin', sys.argv[1])
+    prog = os.path.join(BIN, 'bin', args.case[0])
 
-    case = sys.argv[1].split('-')[1]
+    case = args.case[0].split('-')[1]
 
     input  = os.path.join(SRC, 'data', '{}.in'.format(case))
 
@@ -49,7 +52,7 @@ def main():
         if not res:
             pass_ = False
 
-    return 0 if pass_ else -1
+    return 0 if pass_ or args.skip else -1
 
 if __name__ == '__main__':
     sys.exit(main())
