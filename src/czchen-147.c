@@ -90,7 +90,7 @@ int main()
             value = coin;
         }
 
-        printf("%3d.%02d%17lld\n", dollar, cent, ans[coin][MAX_TYPES-1]);
+        printf("%3d.%02d%17llu\n", dollar, cent, ans[coin][MAX_TYPES-1]);
     }
 
     return 0;
