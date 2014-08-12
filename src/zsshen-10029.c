@@ -29,7 +29,7 @@ int main() {
     short  len_word, global_max, local_max, step;
     bool   is_edit_step, is_linked;
     char   *str_src, *str_dst;
-    Word   *word, *curr, *pred;
+    Word   *word, *curr, *pred = NULL;
     char   input[MAX_WORD_LENGTH];
     Word   *book[MAX_WORD_LENGTH];
 
