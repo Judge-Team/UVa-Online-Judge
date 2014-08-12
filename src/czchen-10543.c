@@ -8,7 +8,8 @@ enum {
 
 static unsigned long long next_cities(
         unsigned long long *city,
-        int city_cnt, unsigned long long curr_cities
+        int city_cnt,
+        unsigned long long curr_cities
 )
 {
     int i;
