@@ -6,15 +6,14 @@
 /*static char *newline = "\n";*/
 struct node {
     int count;
+    int length;
     char *word;
     struct node *pre;
 };
  
-static int editstepcmp(char *s1, char *s2) {
-    int lens1, lens2, lentemp, diff, i;
+static int editstepcmp(char *s1, int lens1, char *s2, int lens2) {
+    int lentemp, diff, i, j;
     char *temp;
-    lens1 = strlen(s1);
-    lens2 = strlen(s2);
     if(lens1 < lens2) {
         temp = s1;
         s1 = s2;
@@ -23,11 +22,10 @@ static int editstepcmp(char *s1, char *s2) {
         lens1 = lens2;
         lens2 = lentemp;
     }
-    /*
-    debug
-    printf("%s %s\n", s1, s2);
-    return 0;
-    */
+
+#if DEBUG
+    printf("Compare stings: %s, %s\n", s1, s2);
+#endif
 
     diff = 0;
 
@@ -43,18 +41,32 @@ static int editstepcmp(char *s1, char *s2) {
     }
     /*else if((lens1 - lens2) == 1) {*/
     else {
-        for(i = 0; i < lens1; i++) {
+        for(i = 0, j = 0; i < lens2;) {
+/*
             temp = malloc(lens1);
-            /*debug
-            printf("before %s\n", s1);*/
+#if DEBUG
+            printf("before modify string: %s\n", s1);
+#endif
             strncpy(temp, s1, i);
             strncpy(&temp[i], &s1[i+1], lens1 - i - 1);
-            /*printf("after %s\n", temp);*/
+#if DEBUG
+            printf("after modify string: %s\n", temp);
+#endif
             diff = strcmp(temp, s2);
-            if(diff == 0) return 0;
-            free(temp);
+*/          
+            if(s2[i] == s1[j]) {
+                i++;
+                j++;
+                continue;
+            }
+            else {
+                j++;
+                diff++; 
+            }
+            if(diff > 1) return -1;
         }
-        return -1;
+        return 0;
+        /*free(temp);return -1;*/
     }
     /*else {
         return -1;
@@ -66,10 +78,12 @@ int main(int argc, char **argv) {
     int i, strlength = 0, max, maxstep = 0;
     struct node *len[WORDLENMAX];
     struct node *tmp, *tmp1;
+
 /*origin
     struct node *last = NULL, *tmp;
     last = malloc(sizeof(struct node));
-    last->pre = 0;*/
+    last->pre = 0;
+*/
     
     for (i = 0 ; i < WORDLENMAX ; i++){
         len[i] = NULL;
@@ -95,8 +109,7 @@ int main(int argc, char **argv) {
                     max = tmp->count;
                 }
             }
-            tmp = tmp->pre;
-            
+            tmp = tmp->pre;    
         }
 */
         for(i = -1; i <= 1; i++) {
@@ -104,19 +117,19 @@ int main(int argc, char **argv) {
             tmp = len[strlength + i - 1];
             while(tmp->pre != NULL) {
                 /*printf("check 1: %x, %s, %d\n", tmp->pre, tmp->word, tmp->count);*/
-                if(editstepcmp(word, tmp->word) == 0) {
+                if(editstepcmp(word, strlength, tmp->word, tmp->length) == 0) {
                     if(tmp->count > max) {
                         max = tmp->count;
                     }
                 }
                 tmp = tmp->pre;
-            
             }
         }
 
         struct node *newnode = NULL;
         newnode = malloc(sizeof(struct node));
         newnode->count = max + 1;
+        newnode->length = strlength;
         /*Fucking Wrong
             newnode->word = word;
         */
@@ -132,12 +145,8 @@ int main(int argc, char **argv) {
 
         if(newnode->count > maxstep) maxstep = newnode->count;
     }
-/*debug
-    while(len[2]->pre != NULL) {
-        printf("%s\n", len[2]->word);
-        len[2] = len[2]->pre;
-    }
-free*/
+
+    /*free node*/
     for(i = 0; i < WORDLENMAX; i++) {
         if(len[i] != NULL) {
             tmp = len[i];
