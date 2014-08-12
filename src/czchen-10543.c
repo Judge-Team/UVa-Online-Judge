@@ -53,7 +53,9 @@ int main()
 
         for (i = 0; i < road_cnt; ++i) {
             scanf("%d%d", &from, &to);
-            city[from] |= (0x1 << to);
+            if (from != to) {
+                city[from] |= (0x1 << to);
+            }
         }
 
 #if DEBUG
