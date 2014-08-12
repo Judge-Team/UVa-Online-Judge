@@ -38,6 +38,13 @@ int main() {
             }
         }    
 
+        /**
+         * Recursive formula (Applying modified Bellman-Ford algorithm) :
+         * 1. dp[step][v] : The minimum distance from source to vertex "v" using "step" steps.
+         * 2. dp[step][v] = Min{dp[step][v], dp[step - 1][u] + weight[u][v]}.  
+         * 3. Terminating condition: step >= "designated minumum step count" and dp[step][n - 1] = -step.
+         */
+
         is_win = false;
         for (step = 2 ; step < MAX_CITY_COUNT ; step++) {
             for (i = 0 ; i < num_city ; i++) {
