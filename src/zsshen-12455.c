@@ -9,7 +9,6 @@
 
 int main() {
     int i, j, num_case, required_val, element_count;
-    bool ans;
     int value[MAX_CATEGORY + 1];
     bool dp[MAX_VALUE + 1][MAX_CATEGORY + 1];
 
@@ -32,6 +31,15 @@ int main() {
             continue;       
         }
 
+        /**
+         * Recursive formula:
+         * 1. dp[i][j]: The status to check if it is possible to fill the package with "i" value
+         *              by considering the "j" categories of objects.
+         *                                      
+         * 2. dp[i][j] = | dp[i][j - 1], if value[j] > i.
+         *               | dp[i][j - 1] (bitwise or) dp[i - value[j]][j - 1], otherwise. 
+         */
+    
         for (i = 1 ; i <= required_val ; i++) {
             for (j = 1 ; j <= element_count ; j++) {
                 if (value[j] > i) {
@@ -47,15 +55,6 @@ int main() {
         } else {
             printf("NO\n");
         }
-
-        /*
-        for (j = 0 ; j <= element_count ; j++) {
-            for (i = 0 ; i <= required_val ; i++) {
-                printf("%d ", dp[i][j]);
-            }
-            printf("\n");
-        }
-        */
 
         num_case--;
     }
