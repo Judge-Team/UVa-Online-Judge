@@ -1,6 +1,7 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <stdbool.h>
+#include <string.h>
 
 
 #define MAX_CITY_COUNT 50
@@ -22,6 +23,7 @@ int main() {
         }
         
         required_step -= 1;
+        memset(dp, 0, sizeof(dp));
 
         for (i = 0 ; i < num_city ; i++) {
             for (j = 0 ; j < num_city ; j++) {
