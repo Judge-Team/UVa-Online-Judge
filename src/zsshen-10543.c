@@ -23,27 +23,38 @@ int main() {
         }
         
         required_step -= 1;
-        memset(dp, 0, sizeof(dp));
 
+        for (i = 1 ; i <= MAX_TRANSITION_COUNT ; i++) {
+            for (j = 0 ; j < num_city ; j++) {
+                dp[i][j] = 0;
+            }        
+        }        
+        
         for (i = 0 ; i < num_city ; i++) {
             for (j = 0 ; j < num_city ; j++) {
                 weight[i][j] = 0;
-                dp[i][j] = 0;
             }
         }
 
         for (k = 0 ; k < num_road ; k++) {
             scanf("%d%d", &i, &j);
-            weight[i][j] = -1;
-            if (i == 0) {
-                dp[1][j] = -1;
+            
+            /* Do not allow loop within a city. */
+            if (i != j) {
+                weight[i][j] = -1;
+                if (i == 0) {
+                    dp[1][j] = -1;
+                }
             }
         }    
 
         /**
          * Recursive formula (Applying modified Bellman-Ford algorithm) :
+         *
          * 1. dp[step][v] : The minimum distance from source to vertex "v" using "step" steps.
+         *
          * 2. dp[step][v] = Min{dp[step][v], dp[step - 1][u] + weight[u][v]}.  
+         *
          * 3. Terminating condition: step >= "designated minumum step count" and dp[step][n - 1] = -step.
          */
 
