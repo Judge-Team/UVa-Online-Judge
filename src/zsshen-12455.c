@@ -9,7 +9,6 @@
 
 int main() {
     int i, j, num_case, required_val, element_count;
-    bool ans;
     int value[MAX_CATEGORY + 1];
     bool dp[MAX_VALUE + 1][MAX_CATEGORY + 1];
 
