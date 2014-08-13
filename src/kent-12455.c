@@ -9,7 +9,6 @@ int p;
 
 int dpFunction(int idx, int len)
 {
-    int t;
     if (len == 0) {
         return 1;
     }
@@ -30,7 +29,7 @@ int comp(const void *p, const void *q)
 
 int main() {
     int t;
-    int i, j, k;
+    int i, j;
     int n;
     scanf("%d",&t);
 
