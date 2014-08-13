@@ -17,7 +17,7 @@ static unsigned long long next_cities(
 
     next_cities = 0;
     for (i = 0; i < city_cnt; ++i) {
-        if (curr_cities & (0x1 << i)) {
+        if (curr_cities & (1ULL << i)) {
             next_cities |= city[i];
         }
     }
@@ -54,7 +54,7 @@ int main()
         for (i = 0; i < road_cnt; ++i) {
             scanf("%d%d", &from, &to);
             if (from != to) {
-                city[from] |= (0x1 << to);
+                city[from] |= (1ULL << to);
             }
         }
 
@@ -86,7 +86,7 @@ int main()
 #if DEBUG
             printf("step = %d, curr_cities = %#llx\n", step, curr_cities);
 #endif
-            if (curr_cities & (0x1 << (city_cnt - 1))) {
+            if (curr_cities & (1ULL << (city_cnt - 1))) {
                     break;
             }
         }
