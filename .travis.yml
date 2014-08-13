@@ -2,6 +2,9 @@ language: c
 
 compiler:
     - gcc
+    
+git:
+  depth: 1
 
 env: CTEST_OUTPUT_ON_FAILURE=1
 
