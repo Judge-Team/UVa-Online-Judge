@@ -158,10 +158,10 @@ int main()
                     edit_step[edit_step_count].step = max(
                         edit_step[edit_step_count].step,
                         edit_step[idx].step+1);
-    #if DEBUG
+#if DEBUG
                     printf("[edit step] Found %s in step[%d] = %d\n", edit_step[idx].word, idx, edit_step[idx].step);
                     printf("[edit step] Set step[%d] = %d\n", edit_step_count, edit_step[edit_step_count].step);
-    #endif
+#endif
                     ans = max(ans, edit_step[edit_step_count].step);
                 }
                 idx = edit_step[idx].next;
