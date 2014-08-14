@@ -142,9 +142,8 @@ int main()
          *                 | { strlen(i),   step }
          *                 | { strlen(i)+1, step }
          *
-         * With balanced B.S.T, we can easily find all previous words with
-         * length = strlen(i)-1 ~ strlen(i)+1. And then we just need to find the
-         * item with maximum step.
+         * We can use an array of list to store all previous words that have
+         * particular length.
          *
          */
 
