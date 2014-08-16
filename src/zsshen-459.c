@@ -25,24 +25,31 @@ typedef struct _Component {
 } Component;
 
 
+/* This function generates graph using adjacency list and prepares disjoint set forest. */
 void construct_graph(Node**(*), Component**(*), char);
 
 
+/* This function release all the allocated memory spaces. */
 void destruct_graph(Node**, Component**, char);
 
 
+/* This function helps to debug the adjacency list and the disjoint set forest. */
 void show_graph(Node**, Component**, char);
 
 
+/* This function traverse the graph to find all the maximal connected components. */
 void find_maximal_connected_components(Node**, Component**, char);
 
 
+/* This function calculates the total count of maximal connected components. */
 int count_maximal_connected_components(Node**, Component**, char);
 
 
+/* The utility function to find the representative node of current component. */
 Component* disjoint_find(Component*);
 
 
+/* The utility function to unite two components. */
 void disjoint_link(Component*, Component*);
 
 
@@ -71,7 +78,7 @@ int main() {
         /* Calculate the count of maximal connected components. */
         component_count = count_maximal_connected_components(adj_list, component_list, node_count);
         printf("%d\n", component_count);
-        /*show_graph(adj_list, component_list, node_count);*/
+        /* show_graph(adj_list, component_list, node_count); */
 
         /* Destruct the adjacency list. */
         destruct_graph(adj_list, component_list, node_count);
@@ -249,7 +256,7 @@ void find_maximal_connected_components(Node **adj_list, Component **component_li
 
             /* Link them if necessary. */
             if (rep_src != rep_tge) {
-                disjoint_link(comp_src, comp_tge);
+                disjoint_link(rep_src, rep_tge);
             }
 
             curr = curr->next;
@@ -263,6 +270,7 @@ void find_maximal_connected_components(Node **adj_list, Component **component_li
 int count_maximal_connected_components(Node **adj_list, Component **component_list, char node_count) {
     char i, j, component_count, rep_id;
     bool *map;
+    Component *curr;
 
     component_count = 0;
     map = (bool*)malloc(sizeof(bool) * node_count);
@@ -272,7 +280,11 @@ int count_maximal_connected_components(Node **adj_list, Component **component_li
     }
 
     for (i = 0 ; i < node_count ; i++) {
-        rep_id = component_list[i]->parent->component_id;
+        curr = component_list[i];
+        while (curr->parent != curr) {
+            curr = curr->parent;
+        }
+        rep_id = curr->component_id;
         map[rep_id] = true;
     }
 
@@ -294,7 +306,7 @@ Component* disjoint_find(Component *curr) {
         curr->parent = disjoint_find(curr->parent);
     }
 
-    return curr;
+    return curr->parent;
 }
 
 
