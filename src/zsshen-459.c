@@ -66,6 +66,9 @@ int main() {
     while (count_case > 0) {
 
         rc = scanf("%c%c", &max_node_id, &garbage);
+        if (rc == EOF) {
+            break;
+        }
 
         /* Construct the adjacency list.*/
         node_count = max_node_id - BASE_NODE_ID + 1;
