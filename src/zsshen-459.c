@@ -26,23 +26,23 @@ typedef struct _Component {
 
 
 /* This function generates graph using adjacency list and prepares disjoint set forest. */
-void construct_graph(Node**(*), Component**(*), char);
+void construct_graph(Node**(*), Component**(*), int);
 
 
 /* This function release all the allocated memory spaces. */
-void destruct_graph(Node**, Component**, char);
+void destruct_graph(Node**, Component**, int);
 
 
 /* This function helps to debug the adjacency list and the disjoint set forest. */
-void show_graph(Node**, Component**, char);
+void show_graph(Node**, Component**, int);
 
 
 /* This function traverse the graph to find all the maximal connected components. */
-void find_maximal_connected_components(Node**, Component**, char);
+void find_maximal_connected_components(Node**, Component**, int);
 
 
 /* This function calculates the total count of maximal connected components. */
-int count_maximal_connected_components(Node**, Component**, char);
+int count_maximal_connected_components(Node**, Component**, int);
 
 
 /* The utility function to find the representative node of current component. */
@@ -54,19 +54,18 @@ void disjoint_link(Component*, Component*);
 
 
 int main() {
-    int count_case;
+    int count_case, rc;
     char max_node_id, node_count, garbage, component_count;    
     Node **adj_list;
     Component **component_list;
-    char buf[BUF_SIZE];
 
-    scanf("%d", &count_case);
-    scanf("%c", &garbage);
-    scanf("%c", &garbage);
+    rc = scanf("%d", &count_case);
+    rc = scanf("%c", &garbage);
+    rc = scanf("%c", &garbage);
 
     while (count_case > 0) {
 
-        scanf("%c%c", &max_node_id, &garbage);
+        rc = scanf("%c%c", &max_node_id, &garbage);
 
         /* Construct the adjacency list.*/
         node_count = max_node_id - BASE_NODE_ID + 1;
@@ -93,8 +92,8 @@ int main() {
 }
 
 
-void construct_graph(Node **(*p_adj_list), Component **(*p_component_list), char node_count) {
-    char i, len, node_id_src, node_id_tge;    
+void construct_graph(Node **(*p_adj_list), Component **(*p_component_list), int node_count) {
+    int i, len, node_id_src, node_id_tge;    
     Node **adj_list, **adj_tail, *new, *curr;
     Component **component_list;
     char buf[BUF_SIZE];
@@ -187,8 +186,8 @@ void construct_graph(Node **(*p_adj_list), Component **(*p_component_list), char
 }
 
 
-void destruct_graph(Node **adj_list, Component **component_list, char node_count) {
-    char i;
+void destruct_graph(Node **adj_list, Component **component_list, int node_count) {
+    int i;
     Node *curr, *pred;
     
     for (i = 0 ; i < node_count ; i++) {
@@ -209,8 +208,8 @@ void destruct_graph(Node **adj_list, Component **component_list, char node_count
 }   
 
 
-void show_graph(Node **adj_list, Component **component_list, char node_count) {
-    char i;
+void show_graph(Node **adj_list, Component **component_list, int node_count) {
+    int i;
     Node *curr, *pred;
 
     printf("Adjacency List:\n");    
@@ -236,8 +235,8 @@ void show_graph(Node **adj_list, Component **component_list, char node_count) {
 }
 
 
-void find_maximal_connected_components(Node **adj_list, Component **component_list, char node_count) {
-    char i, node_id_src, node_id_tge;
+void find_maximal_connected_components(Node **adj_list, Component **component_list, int node_count) {
+    int i, node_id_src, node_id_tge;
     Node *curr;    
     Component *comp_src, *comp_tge, *rep_src, *rep_tge;
 
@@ -267,8 +266,8 @@ void find_maximal_connected_components(Node **adj_list, Component **component_li
 }
 
 
-int count_maximal_connected_components(Node **adj_list, Component **component_list, char node_count) {
-    char i, j, component_count, rep_id;
+int count_maximal_connected_components(Node **adj_list, Component **component_list, int node_count) {
+    int i, component_count, rep_id;
     bool *map;
     Component *curr;
 
