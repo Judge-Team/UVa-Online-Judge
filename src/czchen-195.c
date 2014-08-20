@@ -1,3 +1,4 @@
+#include <assert.h>
 #include <stdio.h>
 #include <stdlib.h>
 
@@ -33,6 +34,8 @@ static void update_anagram(char c, struct Anagram *anagram)
         }
     }
 
+    assert(anagram->data_size < ALPHABET_SIZE);
+
     anagram->data[anagram->data_size].c = c;
     anagram->data[anagram->data_size].cnt = 1;
     ++anagram->data_size;
@@ -57,6 +60,8 @@ static void read_anagram(struct Anagram *anagram, char *line, size_t line_size)
 static void print_anagram(struct Anagram *anagram, int pos, char *line, size_t line_size)
 {
     int i;
+
+    assert(pos < line_size);
 
     if (anagram->cnt == 0) {
         line[pos] = 0;
@@ -102,9 +107,10 @@ int main()
         }
         printf("\n");
 #endif
-        if (anagram.cnt < sizeof(line) - 1) {
-            print_anagram(&anagram, 0, line, sizeof(line));
-        }
+
+        assert(anagram.cnt < sizeof(line) - 1);
+
+        print_anagram(&anagram, 0, line, sizeof(line));
     }
 
     return 0;
