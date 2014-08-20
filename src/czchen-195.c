@@ -16,9 +16,23 @@ struct Anagram {
     } data[ALPHABET_SIZE];
 };
 
-int compare(const void *x, const void *y)
+int compare(const void *ptr_x, const void *ptr_y)
 {
-    return (*(const char *) x) - (*(const char *) y);
+    char x;
+    char y;
+    char low_x;
+    char low_y;
+
+    x = *(const char *) ptr_x;
+    y = *(const char *) ptr_y;
+    low_x = x | 0x20;
+    low_y = y | 0x20;
+
+    if (low_x == low_y) {
+        return x - y;
+    }
+
+    return low_x - low_y;
 }
 
 static void update_anagram(char c, struct Anagram *anagram)
