@@ -22,13 +22,13 @@ int main() {
     char ch, garbage, priority_src, priority_tge;
     char stack[BUF_SIZE];
 
-    scanf("%d%c%c", &round, &garbage, &garbage);
+    garbage = scanf("%d%c%c", &round, &garbage, &garbage);
     
     do {
         top = -1;
         while (true) {
             
-            scanf("%c", &ch);
+            garbage = scanf("%c", &ch);
             /* Check for the end of single test case. */
             if (ch == '\n') {
                 break;
@@ -38,7 +38,7 @@ int main() {
             if (feof(stdin) > 0) {
                 break;
             }
-            scanf("%c", &garbage);
+            garbage = scanf("%c", &garbage);
 
             /* The Polish transformation. */
             if ((ch >= '0') && (ch <= '9')) {
