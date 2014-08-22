@@ -7,6 +7,7 @@
 #define BUF_SIZE        10000
 
 
+#define PRIORITY_NON    -1
 #define PRIORITY_ADD    0
 #define PRIORITY_SUB    0
 #define PRIORITY_MUL    1
@@ -18,7 +19,7 @@ char get_operator_priority(char);
 
 
 int main() {
-    int  round, length, top;
+    int  round, top;
     char ch, garbage, priority_src, priority_tge;
     char stack[BUF_SIZE];
 
@@ -91,5 +92,7 @@ char get_operator_priority(char operator) {
             return PRIORITY_MUL;
         case '/':
             return PRIORITY_DIV;
+        default:
+            return PRIORITY_NON;
     }
 }
