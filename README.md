@@ -17,5 +17,9 @@
 *   [CS342800-高等程式設計--王炳豐老師](http://clark.cs.nthu.edu.tw/~adv_prog/)
 *   [Our Quest to Solve the UVa ICPC Online Problem Set :: UVa Solutions](http://www.questtosolve.com/)
 
+# Debug Materials
+*   [uDebug: The ins and outs of programming](http://www.udebug.com/?search_string=10054)
+*   [UVA toolkit: Problem database &	solver](http://uvatoolkit.com/problemssolve.php)
+
 # License
 This program is licensed under [CC0 1.0 Universal](https://creativecommons.org/publicdomain/zero/1.0/)
