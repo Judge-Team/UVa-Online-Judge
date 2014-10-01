@@ -1,0 +1,247 @@
+#include <stdio.h>
+#include <stdlib.h>
+#include <stdbool.h>
+
+
+typedef struct _Color {
+    int half_front;
+    int half_rear;
+} Color;
+
+typedef struct _Adjacency {
+    int idx_node;
+    struct _Adjacency *next;
+} Adjacency;
+
+typedef struct _Node {
+    Color *color;
+    Adjacency *adj_list;
+    Adjacency *adj_help;
+} Node;
+
+typedef struct _Context {
+    int count_bead;
+    bool found_neck;
+    bool *visit;
+    Node **node_list;
+    Color *neck;
+} Context;
+
+
+void init_traversal(Context**, int);
+
+
+void deinit_traversal(Context*, int);
+
+
+void start_traversal(Context*, int, int);
+
+
+int main() {
+    int rc, i, count_case, idx_case, size;
+    Context *ctx;
+
+    rc = scanf("%d", &count_case);
+    idx_case = 1;
+    while (idx_case <= count_case) {
+
+        /* Initialize the data structures. */
+        rc = scanf("%d", &size);
+        init_traversal(&ctx, size);
+
+        /* Start the traversal using the first bead. */
+        ctx->neck[1].half_front = ctx->node_list[1]->color->half_front;
+        ctx->neck[1].half_rear = ctx->node_list[1]->color->half_rear;  
+        ctx->count_bead++;      
+        start_traversal(ctx, size, 1);
+
+        printf("Case #%d\n", idx_case);
+        if (ctx->found_neck == true) {
+            for (i = 1 ; i <= size ; i++) {
+                printf("%d %d\n", ctx->neck[i].half_front, ctx->neck[i].half_rear);
+            }
+        } else {
+            printf("some beads may be lost\n");
+        }
+
+        /* Release the allocated resource. */
+        deinit_traversal(ctx, size);
+        if (idx_case != count_case) {
+            printf("\n");
+        }        
+        idx_case++;
+    }
+
+    return 0;
+}
+
+
+void init_traversal(Context **p_ctx, int size) {
+    int i, j, rc, half_front, half_rear;
+    bool is_connected;
+    Context *ctx;
+    Node *node_new, *node_old;
+    Adjacency *link_forward, *link_backward;
+
+    *p_ctx = (Context*)malloc(sizeof(Context));
+    ctx = *p_ctx;
+    ctx->visit = (bool*)malloc(sizeof(bool) * (size + 1));
+    ctx->node_list = (Node**)malloc(sizeof(Node*) * (size + 1));
+    ctx->neck = (Color*)malloc(sizeof(Color) * (size + 1));
+    ctx->count_bead = 0;
+    ctx->found_neck = false;
+
+    for (i = 1 ; i <= size ; i++) {
+        ctx->node_list[i] = NULL;
+        ctx->visit[i] = false;
+    }
+
+    for (i = 1 ; i <= size ; i++) {
+        rc = scanf("%d%d", &half_front, &half_rear);
+        ctx->node_list[i] = (Node*)malloc(sizeof(Node));
+
+        /* Prepare the color information. */
+        node_new = ctx->node_list[i];
+        node_new->color = (Color*)malloc(sizeof(Node));
+        node_new->color->half_front = half_front;
+        node_new->color->half_rear = half_rear;
+
+        /* Prepare the adjacency list.*/
+        node_new->adj_list = NULL;
+        for (j = i - 1 ; j >= 1 ; j--) {
+            node_old = ctx->node_list[j];
+
+            is_connected = false;
+            if ((node_new->color->half_front == node_old->color->half_front) ||
+                (node_new->color->half_front == node_old->color->half_rear)) {
+                is_connected = true;
+            } else if ((node_new->color->half_rear == node_old->color->half_front) ||
+                       (node_new->color->half_rear == node_old->color->half_rear)) {
+                is_connected = true;
+            }
+
+            if (is_connected == true) {
+                link_forward = (Adjacency*)malloc(sizeof(Adjacency));
+                link_forward->idx_node = j;
+                link_forward->next = NULL;
+                if (node_new->adj_list == NULL) {
+                    node_new->adj_list = link_forward;
+                    node_new->adj_help = link_forward;
+                } else {
+                    node_new->adj_help->next = link_forward;
+                    node_new->adj_help = link_forward;
+                }
+                
+                link_backward = (Adjacency*)malloc(sizeof(Adjacency));
+                link_backward->idx_node = i;
+                link_backward->next = NULL;
+                if (node_old->adj_list == NULL) {
+                    node_old->adj_list = link_backward;
+                    node_old->adj_help = link_backward;
+                } else {
+                    node_old->adj_help->next = link_backward;
+                    node_old->adj_help = link_backward;
+                }
+            }
+        }
+    }
+
+    return;
+}
+
+
+void deinit_traversal(Context *ctx, int size) {
+    int i;
+    Node *node;
+    Adjacency *pred, *curr;
+
+    for (i = 1 ; i <= size ; i++) {
+
+        node = ctx->node_list[i];
+        if (node != NULL) {
+            if (node->color != NULL) {
+                free(node->color);
+            }
+            curr = node->adj_list;
+            while (curr != NULL) {
+                pred = curr;
+                curr = curr->next;
+                free(pred);
+            }
+            free(node);
+        }
+    }
+
+    free(ctx->node_list);
+    free(ctx->neck);
+    free(ctx->visit);
+    free(ctx);
+    return;
+}
+
+
+void start_traversal(Context *ctx, int size, int idx_node_src) {
+    int idx_node_tge, count_bead, color_front, color_rear;
+    bool found_match;
+    Node *node_src, *node_tge;
+    Color *bead;
+    Adjacency *neighbor;
+    
+    count_bead = ctx->count_bead;
+    if (count_bead == size) {
+        node_src = ctx->node_list[idx_node_src];
+        neighbor = node_src->adj_list;
+        while (neighbor) {
+            if (neighbor->idx_node == 1) {
+                if (ctx->neck[size].half_rear == ctx->neck[1].half_front) {
+                    ctx->found_neck = true;
+                }
+                break;
+            }
+            neighbor = neighbor->next;
+        }
+
+        return;
+    } else {
+        node_src = ctx->node_list[idx_node_src];
+        neighbor = node_src->adj_list;
+        while (neighbor != NULL) {
+            idx_node_tge = neighbor->idx_node;
+            if (ctx->visit[idx_node_tge] == false) {
+                node_tge = ctx->node_list[idx_node_tge];
+                bead = ctx->neck + count_bead;
+
+                found_match = false;
+                if (bead->half_rear == node_tge->color->half_front) {
+                    color_front = node_tge->color->half_front;
+                    color_rear = node_tge->color->half_rear;
+                    found_match = true;
+                } else if (bead->half_rear == node_tge->color->half_rear) {
+                    color_front = node_tge->color->half_rear;
+                    color_rear = node_tge->color->half_front;
+                    found_match = true;
+                }
+                
+                if (found_match == true) {
+                    ctx->count_bead++;
+                    bead = ctx->neck + ctx->count_bead;
+                    bead->half_front = color_front;
+                    bead->half_rear = color_rear;
+                    ctx->visit[idx_node_src] = true;
+
+                    start_traversal(ctx, size, idx_node_tge);                
+                    if (ctx->found_neck == true) {
+                        break;
+                    }
+
+                    ctx->count_bead--;
+                    ctx->visit[idx_node_tge] = false;
+                }
+            }
+            neighbor = neighbor->next;
+        }
+    }
+    
+    return;
+}
+
