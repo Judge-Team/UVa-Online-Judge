@@ -19,7 +19,7 @@ script:
     - make test
 
 after_success:
-    - coveralls
+    - coveralls --exclude-pattern '.*CMake[^/]+\.c(?:pp)?'
 
 notifications:
     webhooks:
