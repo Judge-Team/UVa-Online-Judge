@@ -32,8 +32,17 @@ int main() {
     Node *trie;
 
     rc = scanf("%d", &count_case);
+    /* Dummy check to pass the CI. */
+    if (rc == EOF) {
+        return 1;
+    }
+    
     while (count_case) {
         rc = scanf("%d", &size_book);
+        /* Dummy check to pass the CI.  */
+        if (rc == EOF) {
+            return 1;
+        }
 
         init_trie(&trie);        
         construct_trie(trie, size_book);
@@ -85,6 +94,10 @@ void construct_trie(Node *trie, int size_book) {
     for (idx_phone = 0 ; idx_phone < size_book ; idx_phone++) {
         memset(buf, 0, sizeof(char) * (BUF_SIZE + 1));
         rc = scanf("%s", buf);
+        /* Dummy check to pass the CI. */
+        if (rc == EOF) {
+            return;
+        }
         len_phone = strlen(buf);
 
         curr = trie;
