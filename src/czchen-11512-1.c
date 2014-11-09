@@ -61,6 +61,20 @@ int main()
 
         len = strlen(sequence);
 
+        /*
+         * The algorithm is divided into the following steps:
+         *
+         * 1. Setup a suffix array. This is O(n).
+         *
+         * 2. Sort the suffix array. Since the comparison function needs O(n),
+         *    the recursive formula will be T(n) = 2T(n/2) + n^2. This is
+         *    O(n^2).
+         *
+         * 3. Compare adjust string in sorted suffix array. This is O(n^2)
+         *
+         * The overall complexity is O(n + n^2 + n^2) = O(n^2).
+         */
+
         for (i = 0; i < len; ++i) {
             suffix[i] = i;
         }
