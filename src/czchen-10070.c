@@ -1,10 +1,74 @@
 #include <stdio.h>
+#include <string.h>
 
-int is_leap_year(int year)
+enum {
+    MAX_LINE_LENGTH = 1000,
+};
+
+int is_divisible_by_4(const char *year, size_t len)
 {
-    if (year % 4 == 0) {
-        if (year % 100 == 0) {
-            if (year % 400 == 0) {
+
+    int x = (year[len-2] - '0') * 10 + (year[len-1] - '0');
+
+    return x % 4 == 0;
+}
+
+int is_divisible_by_100(const char *year, size_t len)
+{
+    char x[3] = { 0 };
+
+    memcpy(x, year+len-2, 2);
+
+    if (strcmp(x, "00") == 0) {
+        return 1;
+    }
+
+    return 0;
+}
+
+int is_divisible_by_400(const char *year, size_t len)
+{
+    return is_divisible_by_100(year, len) && is_divisible_by_4(year, len-2);
+}
+
+int is_divisible_by_5(const char *year, size_t len)
+{
+    return year[len-1] == '0' || year[len-1] == '5';
+}
+
+int is_divisible_by_3(const char *year, size_t len)
+{
+    int i;
+    int sum;
+
+    for (i = 0, sum = 0; i < len; ++i) {
+        sum += (year[i] - '0');
+    }
+    return sum % 3 == 0;
+}
+
+int is_divisible_by_11(const char *year, size_t len)
+{
+    int i;
+    int odd_sum;
+    int even_sum;
+
+    for (i = 0, odd_sum = 0, even_sum = 0; i < len; ++i) {
+        if (i % 2) {
+            odd_sum += (year[i] - '0');
+        } else {
+            even_sum += (year[i] - '0');
+        }
+    }
+
+    return (odd_sum - even_sum) % 11 == 0;
+}
+
+int is_leap_year(const char *year, size_t len)
+{
+    if (is_divisible_by_4(year, len)) {
+        if (is_divisible_by_100(year, len)) {
+            if (is_divisible_by_400(year, len)) {
                 return 1;
             }
             return 0;
@@ -14,33 +78,48 @@ int is_leap_year(int year)
     return 0;
 }
 
-int is_huluculu_festival(int year)
+
+int is_huluculu_festival(const char *year, size_t len)
 {
-    return year % 15 == 0;
+    return is_divisible_by_3(year, len) && is_divisible_by_5(year, len);
 }
 
-int is_bulukulu_festival(int year, int is_leap_year)
+int is_bulukulu_festival(const char *year, size_t len, int leap_year)
 {
-    return is_leap_year && year % 55 == 0;
+    return leap_year && is_divisible_by_5(year, len) && is_divisible_by_11(year, len);
+}
+
+void strip(char *year)
+{
+    for (; year[0] != '\0'; ++year) {
+        if (!('0' <= year[0] && year[0] <= '9')) {
+            year[0] = 0;
+            break;
+        }
+    }
 }
 
 int main()
 {
-    int year;
+    char year[MAX_LINE_LENGTH];
     int i;
 
-    for (i = 0; scanf("%d", &year) == 1; ++i) {
+    for (i = 0; fgets(year, sizeof(year), stdin); ++i) {
         int leap_year;
         int huluculu_festival;
         int bulukulu_festival;
+        int len;
 
         if (i) {
             printf("\n");
         }
 
-        leap_year = is_leap_year(year);
-        huluculu_festival = is_huluculu_festival(year);
-        bulukulu_festival = is_bulukulu_festival(year, leap_year);
+        strip(year);
+        len = strlen(year);
+
+        leap_year = is_leap_year(year, len);
+        huluculu_festival = is_huluculu_festival(year, len);
+        bulukulu_festival = is_bulukulu_festival(year, len, leap_year);
 
         if (leap_year) {
             printf("This is leap year.\n");
