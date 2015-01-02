@@ -2,7 +2,7 @@
 #include <string.h>
 
 enum {
-    MAX_LINE_LENGTH = 1000,
+    MAX_LINE_LENGTH = 1000000,
 };
 
 int is_divisible_by_4(const char *year, size_t len)
@@ -15,15 +15,9 @@ int is_divisible_by_4(const char *year, size_t len)
 
 int is_divisible_by_100(const char *year, size_t len)
 {
-    char x[3] = { 0 };
+    int x = (year[len-2] - '0') * 10 + (year[len-1] - '0');
 
-    memcpy(x, year+len-2, 2);
-
-    if (strcmp(x, "00") == 0) {
-        return 1;
-    }
-
-    return 0;
+    return x == 0;
 }
 
 int is_divisible_by_400(const char *year, size_t len)
@@ -33,35 +27,37 @@ int is_divisible_by_400(const char *year, size_t len)
 
 int is_divisible_by_5(const char *year, size_t len)
 {
-    return year[len-1] == '0' || year[len-1] == '5';
+    int x = year[len-1] - '0';
+    return x == 0 || x == 5;
 }
 
 int is_divisible_by_3(const char *year, size_t len)
 {
     int i;
-    int sum;
+    int x;
 
-    for (i = 0, sum = 0; i < len; ++i) {
-        sum += (year[i] - '0');
+    for (i = 0, x = 0; i < len; ++i) {
+        x += year[i] - '0';
+        x %= 3;
     }
-    return sum % 3 == 0;
+
+    return x == 0;
 }
 
 int is_divisible_by_11(const char *year, size_t len)
 {
     int i;
-    int odd_sum;
-    int even_sum;
+    int x;
 
-    for (i = 0, odd_sum = 0, even_sum = 0; i < len; ++i) {
+    for (i = 0, x = 0; i < len; ++i) {
         if (i % 2) {
-            odd_sum += (year[i] - '0');
+            x += (year[i] - '0');
         } else {
-            even_sum += (year[i] - '0');
+            x -= (year[i] - '0');
         }
     }
 
-    return (odd_sum - even_sum) % 11 == 0;
+    return x % 11 == 0;
 }
 
 int is_leap_year(const char *year, size_t len)
