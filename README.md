@@ -2,6 +2,7 @@
 [![Build Status](https://travis-ci.org/Judge-Team/UVa-Online-Judge.svg?branch=master)](https://travis-ci.org/Judge-Team/UVa-Online-Judge)
 [![Coverage Status](https://img.shields.io/coveralls/Judge-Team/UVa-Online-Judge.svg)](https://coveralls.io/r/Judge-Team/UVa-Online-Judge?branch=master)
 [![Gitter chat](https://img.shields.io/badge/GITTER-Judge--Team-brightgreen.svg)](https://gitter.im/Judge-Team)
+[![slack](https://img.shields.io/badge/slack-Judge--Team-brightgreen.svg)](https://judge-team.slack.com)
 [![CC0 1.0 Universal](http://img.shields.io/badge/license-CC0%201.0%20Universal-brightgreen.svg)](https://creativecommons.org/publicdomain/zero/1.0/)
 
 [UVa Online Judge](http://uva.onlinejudge.org/)
