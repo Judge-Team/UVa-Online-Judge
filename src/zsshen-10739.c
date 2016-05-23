@@ -9,7 +9,7 @@
 
 int ComputeCost(char* str, int len)
 {
-    //
+    /*
     // Object Definition:
     //  cost[i][j]  : The cost to convert substring(i, j) to palindrome.
     //  palin[i][j] : Whether the substring(i, j) is a palindrome.
@@ -25,6 +25,7 @@ int ComputeCost(char* str, int len)
     //               | MIN | cost[i + 1][j] + 1
     //               |     | cost[i][j - 1] + 1
     //
+    */
 
     int cost[len][len];
     bool palin[len][len];
@@ -77,13 +78,14 @@ int ComputeCost(char* str, int len)
 
 int main()
 {
+    int dummy; /* Dummy to pass unused-return-value warning. */
     int num_case;
-    scanf("%d", &num_case);
+    dummy = scanf("%d", &num_case);
 
     char str[BUF_SIZE];
     int idx_case = 1;
     while (idx_case <= num_case) {
-        scanf("%s", str);
+        dummy = scanf("%s", str);
 
         int len = strlen(str);
         int ans;
