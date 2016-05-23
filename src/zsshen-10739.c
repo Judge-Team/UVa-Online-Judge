@@ -9,6 +9,23 @@
 
 int ComputeCost(char* str, int len)
 {
+    //
+    // Object Definition:
+    //  cost[i][j]  : The cost to convert substring(i, j) to palindrome.
+    //  palin[i][j] : Whether the substring(i, j) is a palindrome.
+    //
+    // Quick Palindrome Inspection:
+    //  palin[i][j] = (string[i] == string[j]) && palin[i + 1][j - 1].
+    //
+    // Optimal Function:
+    //               | 0                    , if palin[i][j] == true
+    //               |                      , Otherwise
+    //               |     | | cost[i + 1][j - 1]       , if string[i] == string[j].
+    //  cost[i][j] = |     | | cost[i + 1][j - 1] + 1   , Otherwise
+    //               | MIN | cost[i + 1][j] + 1
+    //               |     | cost[i][j - 1] + 1
+    //
+
     int cost[len][len];
     bool palin[len][len];
 
